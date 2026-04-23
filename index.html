@@ -32,13 +32,21 @@
             max-width: 1500px;
             margin: auto;
             padding: 40px 20px;
+			text-align: center;
         }
 
         .projects {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            grid-template-columns: 1fr;
             gap: 20px;
         }
+		
+		/* 2 columns when theres space*/
+		@media (min-width: 1200px) {
+		.projects {
+        grid-template-columns: repeat(2, 1fr);
+		}
+
 
         .project {
             background: #020617;
@@ -65,6 +73,7 @@
             padding: 20px;
             color: #6b7280;
         }
+		
     </style>
 </head>
 <body>
@@ -77,7 +86,7 @@
 <section>
     <h2>About</h2>
     <p>
-        Hi!, I'm a game developer focused on programming in Unity, as well as OpenGl and C++
+        Hi I'm Allan!, I'm a game developer focused on programming in Unity, as well as OpenGl and C++
     </p>
 </section>
 
@@ -87,13 +96,34 @@
 
         <div class="project">
             <h3>Kyomen</h3>
-            <p>Kyomen is an isometric bullet hell combinging fast paced gameplay with striking visuals.</p>
+            <p>Isometric bullet hell combining fast paced gameplay with striking visuals.</p>
+			<ul>
+				<li>Created enemy movement and attack behaviours</li>
+				<li>Implimented boss attack patterns and decision making</li>
+			</ul>
 			<iframe frameborder="0" src="https://itch.io/embed/4250442?bg_color=1a1a1a&amp;fg_color=ffffff&amp;border_color=940000" width="552" height="167"><a href="https://ath3rox.itch.io/kyomen">Kyomen by Ath3rox, qlxiy, Bishop, KyleMc04, Ryanmcg04, Allan</a></iframe>
         </div>
 
         <div class="project">
-            <h3>Project Two</h3>
-            <p>Short description of what it is.</p>
+            <h3>The Ballad of Auld Dunrod</h3>
+            <p>Based on the scottish folklore poem, the Ballad of Auld Dunrod invites the player to stealthily allow Dunrod to escape capture</p>
+			<ul>
+				<li>Led the programming team to deliver a complete client product</li>
+				<li>Optimised the game to run on web for school ipads</li>
+				<li>Created guard behaviour</li>			
+				<li>Made the dynamic top down camera system</li>
+			</ul>
+			<iframe frameborder="0" src="https://itch.io/embed/3041421?dark=true" width="552" height="167"><a href="https://gcugames.itch.io/ballad-of-auld-dunrod">Ballad of Auld Dunrod by Glasgow Caledonian University, Patricija Gudynaite, Blitz_Maxis, SkrubJG, Allan, Bishop</a></iframe>
+        </div>
+		
+		<div class="project">
+            <h3>Tower of Tales</h3>
+            <p>With nothing left to lose the cultist ventures into the arena to defeat the boss and wish back his family</p>
+			<ul>
+				<li>Created the boss' attack patterns and reactive decision making</li>
+				<li>Added controller support</li>
+				<li>Created the player movement</li>	
+				<iframe frameborder="0" src="https://itch.io/embed/2672862?dark=true" width="552" height="167"><a href="https://qlxiy.itch.io/tower-of-tales">Tower of Tales by qlxiy, Allan, PastorYoda216, Patricija Gudynaite, ashxy, beansTM</a></iframe>			</ul>
         </div>
 
     </div>
