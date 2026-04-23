@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allan Blyth | Portfolio</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: #e5e7eb;
+        }
+
+        header {
+            padding: 40px 20px;
+            text-align: center;
+            background: #020617;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        p {
+            color: #9ca3af;
+        }
+
+        section {
+            max-width: 1500px;
+            margin: auto;
+            padding: 40px 20px;
+        }
+
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .project {
+            background: #020617;
+            padding: 20px;
+            border-radius: 10px;
+        }
+		
+		.project iframe{
+				width: 100%;
+				max-width: 600px;
+		}
+
+        a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Allan Blyth</h1>
+    <p>Game Developer (C#, C++, OpenGl)</p>
+</header>
+
+<section>
+    <h2>About</h2>
+    <p>
+        Hi!, I'm a game developer focused on programming in Unity, as well as OpenGl and C++
+    </p>
+</section>
+
+<section>
+    <h2>My Projects</h2>
+    <div class="projects">
+
+        <div class="project">
+            <h3>Kyomen</h3>
+            <p>Kyomen is an isometric bullet hell combinging fast paced gameplay with striking visuals.</p>
+			<iframe frameborder="0" src="https://itch.io/embed/4250442?bg_color=1a1a1a&amp;fg_color=ffffff&amp;border_color=940000" width="552" height="167"><a href="https://ath3rox.itch.io/kyomen">Kyomen by Ath3rox, qlxiy, Bishop, KyleMc04, Ryanmcg04, Allan</a></iframe>
+        </div>
+
+        <div class="project">
+            <h3>Project Two</h3>
+            <p>Short description of what it is.</p>
+        </div>
+
+    </div>
+</section>
+
+<section>
+    <h2>Contact</h2>
+    <p>Email: allanjwb@gmail.com</p>
+    <p>GitHub: <a href="https://github.com/allanOwO">Allan</a></p>
+</section>
+
+<footer>
+    <p>© 2026 Allan Blyth</p>
+</footer>
+
+</body>
+</html>
