@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Allan Blyth | Portfolio</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         body {
             margin: 0;
@@ -32,7 +34,7 @@
             max-width: 1500px;
             margin: auto;
             padding: 40px 20px;
-			text-align: center;
+            text-align: center;
         }
 
         .projects {
@@ -40,12 +42,13 @@
             grid-template-columns: 1fr;
             gap: 20px;
         }
-		
-		/* 2 columns when theres space*/
-		@media (min-width: 1200px) {
-		.projects {
-        grid-template-columns: repeat(2, 1fr);
-		}
+
+        /* 2 columns when theres space*/
+        @media (min-width: 1200px) {
+            .projects {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
 
 
         .project {
@@ -53,27 +56,95 @@
             padding: 20px;
             border-radius: 10px;
         }
-		
-		.project iframe{
-				width: 100%;
-				max-width: 600px;
-		}
+
+            .project iframe {
+                width: 100%;
+                max-width: 600px;
+            }
 
         a {
             color: #38bdf8;
             text-decoration: none;
         }
 
-        a:hover {
-            text-decoration: underline;
-        }
+            a:hover {
+                text-decoration: underline;
+            }
 
         footer {
             text-align: center;
             padding: 20px;
             color: #6b7280;
         }
-		
+
+        .linkButton {
+            display: flex;
+            justify-content: center; /* centers */
+            gap: 20px; /* */
+            margin-top: 10px;
+        }
+
+        /* Itch.io Icon Button */
+        .itch-icon-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: #fa5c5c; /* Official Itch Red */
+            color: white !important; /* Forces white icon on red background */
+            border-radius: 8px;
+            font-size: 1.5rem;
+            transition: all 0.2s ease;
+            text-decoration: none !important;
+        }
+
+            .itch-icon-link:hover {
+                background: #ff4444;
+                transform: scale(1.1);
+                text-decoration: none !important;
+            }
+
+        /* LinkedIn Icon Button */
+        .linkedin-icon-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: #0077b5; /* Official LinkedIn Blue */
+            color: white !important;
+            border-radius: 8px;
+            font-size: 1.5rem;
+            transition: all 0.2s ease;
+            text-decoration: none !important;
+        }
+
+            .linkedin-icon-link:hover {
+                background: #00a0dc;
+                transform: scale(1.1);
+                text-decoration: none !important;
+            }
+
+        .github-icon-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: #24292e;
+            color: white !important;
+            border-radius: 8px;
+            font-size: 1.5rem;
+            transition: all 0.2s ease;
+        }
+
+            .github-icon-link:hover {
+                background: #444;
+                transform: scale(1.1);
+                text-decoration: none !important;
+            }
+
     </style>
 </head>
 <body>
@@ -88,6 +159,20 @@
     <p>
         Hi I'm Allan!, I'm a game developer focused on programming in Unity, as well as OpenGl and C++
     </p>
+    <div class="linkButton">
+        <a href="https://allanowo.itch.io" class="itch-icon-link">
+            <i class="fa-brands fa-itch-io"></i>
+        </a>
+
+        <a href="https://www.linkedin.com/in/allan-blyth-32977b403/" class="linkedin-icon-link">
+            <i class="fa-brands fa-linkedin-in"></i>
+        </a>
+
+        <a href="https://github.com/allanOwO" class="github-icon-link">
+            <i class="fa-brands fa-github"></i>
+        </a>
+
+    </div>
 </section>
 
 <section>
@@ -123,7 +208,8 @@
 				<li>Created the boss' attack patterns and reactive decision making</li>
 				<li>Added controller support</li>
 				<li>Created the player movement</li>	
-				<iframe frameborder="0" src="https://itch.io/embed/2672862?dark=true" width="552" height="167"><a href="https://qlxiy.itch.io/tower-of-tales">Tower of Tales by qlxiy, Allan, PastorYoda216, Patricija Gudynaite, ashxy, beansTM</a></iframe>			</ul>
+            </ul>
+			<iframe frameborder="0" src="https://itch.io/embed/2672862?dark=true" width="552" height="167"><a href="https://qlxiy.itch.io/tower-of-tales">Tower of Tales by qlxiy, Allan, PastorYoda216, Patricija Gudynaite, ashxy, beansTM</a></iframe>			</ul>
         </div>
 
     </div>
