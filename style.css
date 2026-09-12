@@ -5,6 +5,84 @@ body {
     color: #e5e7eb;
 }
 
+.case-study {
+    max-width: 1050px;
+    text-align: left;
+}
+
+.case-study-header {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 30px;
+    align-items: center;
+    margin-bottom: 25px;
+    padding: 30px;
+    background: #020617;
+    border-radius: 10px;
+}
+
+.case-study-header h2,
+.case-study-header p {
+    text-align: left;
+}
+
+.game-cover {
+    min-height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #fa5c5c, #7c2d12);
+    border-radius: 8px;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.project-meta {
+    color: #9ca3af;
+    font-size: 0.9rem;
+}
+
+.itch-button {
+    display: inline-block;
+    padding: 12px 18px;
+    background: #fa5c5c;
+    color: white;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.itch-button:hover {
+    background: #ff4444;
+    text-decoration: none;
+}
+
+.case-study .project {
+    margin-bottom: 20px;
+}
+
+@media (max-width: 700px) {
+    .case-study-header {
+        grid-template-columns: 1fr;
+    }
+}
+
+.case-study h1,
+.case-study h2 {
+    text-align: center;
+}
+
+.case-study ul {
+    color: #9ca3af;
+    line-height: 1.8;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
 header {
     padding: 40px 20px;
     text-align: center;
