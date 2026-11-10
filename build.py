@@ -3,30 +3,30 @@ import html
 E=html.escape
 NAME="Allan Blyth"; EMAIL="allanjwb@gmail.com"; CV="Allan_Blyth_CV.pdf"
 ITCH="https://allanowo.itch.io"; LI="https://www.linkedin.com/in/allan-blyth-32977b403/"; GH="https://github.com/allanOwO"
-def P(slug,title,kind,meta,summary,cover,group,tags,role,bullets,learned,itch,label,video="",yt=""):
-    return dict(slug=slug,title=title,kind=kind,meta=meta,summary=summary,cover=cover,group=group,tags=tags,role=role,bullets=bullets,learned=learned,itch=itch,label=label,video=video,yt=yt)
+def P(slug,title,kind,meta,summary,cover,group,tags,role,bullets,learned,itch,label,video="",yt="",play=""):
+    return dict(slug=slug,title=title,kind=kind,meta=meta,summary=summary,cover=cover,group=group,tags=tags,role=role,bullets=bullets,learned=learned,itch=itch,label=label,video=video,yt=yt,play=play)
 PROJECTS=[
 P("kyomen","Kyomen","Isometric action roguelike","Programmer, Marmot Studios | Global Game Jam 2026, now heading to Steam",
  "Don't let the weight of your past collapse the world. A fast-paced isometric arena combat game built around dynamic mask-based gameplay, started as a Global Game Jam 2026 entry and now in development by Marmot Studios for Steam.",
  "https://img.itch.zone/aW1nLzI1MzU2MTE1LnBuZw==/original/HTEPdh.png","feat",["Unity","C#","State machines","Boss AI"],
- "I work on the combat programming that drives the game's encounters: escalating pressure, how enemies approach the player, and a boss reactive enough that fights feel less predictable. After the jam, the team of five formed Marmot Studios Ltd to take the game to release.",
- ["Designed and built a four-phase boss fight on state machines, with weighted attack selection and coroutine-based timing.","Designed and implemented the enemy wave system to control encounter pacing.","Created enemy movement and attack behaviours, coordinating navigation and combat states.","Implemented boss attack patterns and reactive decision-making that respond to the player's actions.","Iterated from jam prototype to a playable demo."],
- "Designing gameplay systems under a tight deadline, then hardening them for a real release. Balancing reusable enemy logic against the specific needs of a boss encounter.",
+ "I work on the combat programming that drives the game's encounters: escalating pressure, how enemies approach the player, and a boss reactive enough that fights feel less predictable. Since the jam I've spent as much time on readability as on behaviour, making sure every boss attack is telegraphed clearly enough to feel fair. After the jam, the team of five formed Marmot Studios Ltd to take the game to release.",
+ ["Designed and built a four-phase boss fight on state machines, with weighted attack selection and coroutine-based timing.","Built the attack telegraph system: fill indicators driven by a custom shader, with a wind-up on every boss attack so players can read what is coming.","Built the transitions between boss phases, including the explosive set piece that marks each escalation.","Designed and implemented the enemy wave system to control encounter pacing.","Built the first versions of the four enemy types during the jam (melee, ranged, explosive and charger), with separation steering and edge avoidance on a floor that rises and falls.","Implemented boss attack patterns and reactive decision-making that respond to the player's actions.","Iterated from jam prototype to a playable demo."],
+ "Designing gameplay systems under a tight deadline, then hardening them for a real release. Balancing reusable enemy logic against the specific needs of a boss encounter, and learning that an attack is only as good as its telegraph.",
  "4250442","https://ath3rox.itch.io/kyomen|Kyomen by Ath3rox, qlxiy, Bishop, KyleMc04, Ryanmcg04, Allan"),
 P("ballad-of-auld-dunrod","The Ballad of Auld Dunrod","Third-person stealth exploration","Programming Lead | Client project for a comic book publisher | Browser game",
  "A third-person stealth exploration game based on a Scottish folklore poem, in which the player helps Dunrod escape capture.",
  "https://img.itch.zone/aW1nLzIwNzE2NDY4LnBuZw==/original/e%2BdR4d.png","unity",["Unity","C#","WebGL","Stealth AI"],
- "I led the programming team from development through delivery: coordinating technical work, prioritising features, and making sure the game was stable and complete enough to present as a client project.",
- ["Created guard behaviour to support the stealth loop and give the player readable threats.","Built a dynamic top-down camera system to keep the player oriented.","Optimised for web deployment on mobile browsers and school iPads, where performance and input options were limited."],
- "Leadership, prioritisation, browser optimisation and team delivery against a clear client-facing goal.",
- "3041421","https://gcugames.itch.io/ballad-of-auld-dunrod|Ballad of Auld Dunrod by Glasgow Caledonian University, Patricija Gudynaite, Blitz_Maxis, SkrubJG, Allan, Bishop",yt="uGwDVG2_ZKo"),
+ "I led the programming team and wrote around 90% of the game's code myself, from the stealth AI to the camera, UI and touch controls. I also coordinated the technical work, prioritised features, and made sure the game was stable and complete enough to deliver as a client project.",
+ ["Built the guard AI: a patrol, investigate and chase state machine with view-cone detection and an alert meter.","Added rooftop lookouts that sweep an area and call nearby guards when they spot the player.","Built a top-down camera that follows the player along a looping dolly track, finding the closest point on the path and recovering cleanly when the player respawns.","Wrote the touch controls, including a virtual joystick, so the game plays on phones and school iPads.","Added a fairy guide that pathfinds to the next objective and leaves a particle trail, plus a map that tracks progress.","Optimised for mobile browsers by culling lights outside the camera's view."],
+ "Owning most of a codebase while still leading a team: prioritising, keeping systems simple enough for others to build on, optimising for the browser, and delivering against a clear client-facing goal.",
+ "3041421","https://gcugames.itch.io/ballad-of-auld-dunrod|Ballad of Auld Dunrod by Glasgow Caledonian University, Patricija Gudynaite, Blitz_Maxis, SkrubJG, Allan, Bishop",yt="uGwDVG2_ZKo",play="dunrod"),
 P("tower-of-tales","Tower of Tales","Arena shooter","Gameplay Programmer | Team project",
  "A short arena shooter inspired by Arena of the Mad King, The Binding of Isaac and Realm of the Mad God. A cultist enters the arena to defeat the boss and bring back their family.",
  "https://img.itch.zone/aW1nLzI2OTAwMDEyLmpwZw==/original/omEVot.jpg","unity",["Unity","C#","Boss AI","Controller input"],
  "I worked on the player and boss gameplay loop, focusing on responsive movement and an encounter that reacts to the player's position and actions.",
  ["Created boss attack patterns and reactive decision-making to structure the main encounter.","Implemented player movement and tuned its feel for arena combat.","Added controller support so the game plays well across input devices."],
  "Encounter design, input abstraction, and how boss behaviour can communicate patterns while still demanding player adaptation.",
- "2672862","https://qlxiy.itch.io/tower-of-tales|Tower of Tales by qlxiy, Allan, PastorYoda216, Patricija Gudynaite, ashxy, beansTM",yt="i9INBV4BUcI"),
+ "2672862","https://qlxiy.itch.io/tower-of-tales|Tower of Tales by qlxiy, Allan, PastorYoda216, Patricija Gudynaite, ashxy, beansTM",yt="i9INBV4BUcI",play="tower"),
 P("bob-steve","Bob n' Steve","Cooperative action","Programmer | Team project",
  "Four soldiers, one string, a field that wants you dead. A cooperative action game with a shared string as its central teamwork mechanic.",
  "https://img.itch.zone/aW1nLzI5OTIwNDEzLnBuZw==/original/qetc6E.png","unity",["Unity","C#","Multiplayer","Voice chat"],
@@ -40,7 +40,7 @@ P("chill-fishing-game","Just a Chill Fishing Game","Relaxed fishing game","Gamep
  "I helped take the game from concept to a complete playable release within 48 hours, focusing on fishing, discovering life underwater and making the environment feel active.",
  ["Designed and implemented the core fishing mechanic, from player interaction to catch feedback.","Implemented fish behaviours that make exploration rewarding.","Created bubble behaviours and environmental feedback for movement and atmosphere."],
  "Scoping features, iterating quickly, and delivering polished gameplay under a strict time limit.",
- "3271726","https://allanowo.itch.io/just-a-chill-fishing-game|Just a Chill Fishing Game by Allan, qlxiy, Ath3rox, Bishop, KyleMc04"),
+ "3271726","https://allanowo.itch.io/just-a-chill-fishing-game|Just a Chill Fishing Game by Allan, qlxiy, Ath3rox, Bishop, KyleMc04",play="fishing"),
 P("voxel-world","Voxel World Prototype","OpenGL voxel engine","Solo programmer | C++ | OpenGL",
  "A voxel world built from the ground up to explore procedural generation, real-time lighting, world interaction and collision. My first OpenGL project. I've since gone back and optimised it, and it now runs a 200 chunk render distance at over 1,300 FPS.",
  "https://img.itch.zone/aW1nLzI1MDE3MTYxLnBuZw==/original/%2BL%2BNqm.png","gl",["C++","OpenGL","Procedural generation","Optimisation"],
@@ -64,6 +64,7 @@ P("asteroids","Asteroids","Space shooter prototype","Solo programmer | C++ | Ope
  "Real-time rendering, procedural content, gameplay feedback, and how technical constraints can set a consistent visual identity.",
  "5002358","https://allanowo.itch.io/asteroids|Asteroids by Allan"),
 ]
+PLAYNOTE={"dunrod":"Built for touch screens: drag the on-screen joystick with your finger or mouse."}
 def page(title,desc,img,body,path="",cls=""):
     return f'''<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -96,10 +97,12 @@ def case(p):
     vid=f'<video controls muted loop playsinline src="{p["video"]}"></video>' if p["video"] else ""
     if p["yt"]: vid+=f'<div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/{p["yt"]}" title="{E(p["title"])} gameplay video" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>'
     n=PROJECTS[(PROJECTS.index(p)+1)%len(PROJECTS)]
+    web=f'''<div class="play" data-game="{p["play"]}" data-title="{E(p["title"])}"><img src="{p["cover"]}" alt="" loading="lazy"><button class="btn main" type="button">Play in browser</button></div>
+<p class="muted play-note">Runs in your browser, no download. {PLAYNOTE.get(p["play"],"Best on desktop with a keyboard and mouse.")} <button class="link" type="button" data-fs hidden>Fullscreen</button></p>''' if p["play"] else ""
     b=f'''<div class="wrap"><div class="cs-head"><div><a href="index.html">&larr; All projects</a><h1>{E(p["title"])}</h1><p class="muted">{E(p["meta"])}</p><p>{E(p["summary"])}</p>{tags(p)}</div><img class="cover" src="{p["cover"]}" alt="{E(p["title"])} cover image"></div>
 {vid}<div class="cs-body"><div><h2>My role</h2><p>{E(p["role"])}</p><h2 style="margin-top:32px">What I learned</h2><p>{E(p["learned"])}</p></div>
 <div><h2>What I built</h2><ul>{"".join(f"<li>{E(x)}</li>" for x in p["bullets"])}</ul></div></div>
-<section><h2>Play it</h2><iframe src="https://itch.io/embed/{p["itch"]}?dark=true" width="552" height="167" title="{E(p["title"])} on itch.io" loading="lazy"><a href="{url}">{E(lab)}</a></iframe></section>
+<section><h2>Play it</h2>{web}<iframe src="https://itch.io/embed/{p["itch"]}?dark=true" width="552" height="167" title="{E(p["title"])} on itch.io" loading="lazy"><a href="{url}">{E(lab)}</a></iframe></section>
 <nav class="next" aria-label="Next project"><span class="muted">Next project</span><a href="{n["slug"]}.html">{E(n["title"])} &rarr;</a></nav></div>'''
     return page(f'{p["title"]} | {NAME}',p["summary"],p["cover"],b)
 open("index.html","w",encoding="utf-8").write(index())
