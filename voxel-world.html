@@ -1,15 +1,102 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Voxel World Prototype | Allan Blyth</title><meta name="description" content="A voxel world built from the ground up to explore procedural generation, real-time lighting, world interaction and collision. My first OpenGL project. I&#x27;ve since gone back and optimised it, and it now runs a 200 chunk render distance at over 1,300 FPS.">
-<meta property="og:title" content="Voxel World Prototype | Allan Blyth"><meta property="og:description" content="A voxel world built from the ground up to explore procedural generation, real-time lighting, world interaction and collision. My first OpenGL project. I&#x27;ve since gone back and optimised it, and it now runs a 200 chunk render distance at over 1,300 FPS."><meta property="og:image" content="https://img.itch.zone/aW1nLzI1MDE3MTYxLnBuZw==/original/%2BL%2BNqm.png"><meta name="theme-color" content="#15111f">
+<title>Voxel World Prototype | Allan Blyth</title><meta name="description" content="A voxel world built from the ground up to explore procedural generation, real-time lighting, world interaction and collision. My first OpenGL project. I&#x27;ve since gone back and optimised it, and it now runs a 200 chunk render distance at over 1,300 FPS."><link rel="canonical" href="https://allanowo.github.io/voxel-world.html">
+<meta property="og:type" content="website"><meta property="og:url" content="https://allanowo.github.io/voxel-world.html"><meta property="og:title" content="Voxel World Prototype | Allan Blyth"><meta property="og:description" content="A voxel world built from the ground up to explore procedural generation, real-time lighting, world interaction and collision. My first OpenGL project. I&#x27;ve since gone back and optimised it, and it now runs a 200 chunk render distance at over 1,300 FPS."><meta property="og:image" content="https://allanowo.github.io/img/voxel-world-1.png">
+<meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#15111f">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23ff4d5e'/%3E%3Cpath d='M8 24 16 8l8 16' fill='none' stroke='%2315111f' stroke-width='4'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="style.css"></head><body>
-<div class="hp"><div class="hp-in"><span class="hp-label" aria-hidden="true">Phase 1 of 4</span><div class="hp-bar" aria-hidden="true"><i class="hp-lag"></i><i class="hp-fill"></i></div><nav aria-label="Main"><a href="index.html">Home</a><a href="index.html#work">Work</a><a href="index.html#contact">Contact</a></nav></div></div>
-<main><div class="wrap"><div class="cs-head"><div><a href="index.html">&larr; All projects</a><h1>Voxel World Prototype</h1><p class="muted">Solo programmer | C++ | OpenGL</p><p>A voxel world built from the ground up to explore procedural generation, real-time lighting, world interaction and collision. My first OpenGL project. I&#x27;ve since gone back and optimised it, and it now runs a 200 chunk render distance at over 1,300 FPS.</p><ul class="tags"><li>C++</li><li>OpenGL</li><li>Procedural generation</li><li>Optimisation</li></ul></div><img class="cover" src="https://img.itch.zone/aW1nLzI1MDE3MTYxLnBuZw==/original/%2BL%2BNqm.png" alt="Voxel World Prototype cover image"></div>
-<div class="cs-body"><div><h2>My role</h2><p>A practical exploration of low-level rendering and engine development. Rather than relying on a pre-built world system, I implemented the core systems needed to create and interact with a large voxel environment. Later I went back to see how far I could push performance. I wrote a benchmark first so I could tell whether each change actually helped.</p><h2 style="margin-top:32px">What I learned</h2><p>C++, OpenGL rendering, procedural systems, spatial organisation and lighting, and the challenges of building engine functionality from scratch. Going back to optimise it taught me to measure first and only keep the changes that make a real difference.</p></div>
-<div><h2>What I built</h2><ul><li>Built an infinite procedural world on a chunk-based system.</li><li>Implemented real-time directional sunlight with voxel-cast shadows.</li><li>Created interactive block modification so players can change the terrain.</li><li>Implemented AABB collision for reliable movement through voxel terrain.</li><li>Added greedy meshing and per-vertex ambient occlusion.</li><li>Merged the whole world into one big indirect draw instead of a draw per chunk.</li><li>Split chunks into 16x16x16 pieces so whole regions can be culled at once.</li><li>Added LODs so distant terrain is drawn at lower detail, which let me raise the render distance from 64 to 200 chunks.</li><li>Moved world generation and meshing onto background threads.</li><li>Added world saves, so the blocks you change stay changed.</li><li>Wrote a benchmark that flies, spins and edits the world, then logs FPS, frame times and memory to a CSV.</li><li>Same 64 chunk distance, before and after: loading went from 48 s to 1.5 s and average FPS from 108 to 836. At 200 chunks it averages 1,353 FPS at 1080p on an RX 9060 XT.</li></ul></div></div>
-<section><h2>Play it</h2><iframe src="https://itch.io/embed/4197600?dark=true" width="552" height="167" title="Voxel World Prototype on itch.io" loading="lazy"><a href="https://allanowo.itch.io/voxel-world-prototype">Voxel World Prototype by Allan</a></iframe></section>
-<nav class="next" aria-label="Next project"><span class="muted">Next project</span><a href="asteroids.html">Asteroids &rarr;</a></nav></div></main>
-<footer><div class="wrap">&copy; 2026 Allan Blyth. Gameplay programmer, Scotland.</div></footer><script src="script.js"></script></body></html>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="top-in"><a class="brand" href="index.html">Allan Blyth<span>Gameplay programmer</span></a>
+<nav aria-label="Main"><a href="index.html#work">Work</a><a href="index.html#about">About</a><a href="index.html#contact">Contact</a><a class="cv" href="Allan_Blyth_CV.pdf">CV</a></nav></div>
+<div class="hp-bar" aria-hidden="true"><i class="hp-lag"></i><i class="hp-fill"></i></div></header>
+<main id="main"><div class="wrap"><div class="cs-head"><div><a class="back" href="index.html#work">&larr; All projects</a><p class="kicker">OpenGL voxel engine</p><h1>Voxel World Prototype</h1><p class="lede">A voxel world built from the ground up to explore procedural generation, real-time lighting, world interaction and collision. My first OpenGL project. I&#x27;ve since gone back and optimised it, and it now runs a 200 chunk render distance at over 1,300 FPS.</p>
+<div class="btns"><a class="btn main" href="https://allanowo.itch.io/voxel-world-prototype">View on itch.io</a><a class="btn" href="#built">What I built</a><a class=btn href=#code>See the code</a></div></div><img class="cover" src="img/voxel-world-1.png" alt="Voxel World Prototype screenshot" fetchpriority="high"></div>
+<dl class="meta"><div><dt>Role</dt><dd>Solo programmer</dd></div><div><dt>Team</dt><dd>Solo</dd></div><div><dt>Context</dt><dd>Personal project</dd></div><div><dt>Tech</dt><dd>C++, OpenGL, Procedural generation, Optimisation</dd></div></dl>
+<dl class="stats"><div><dt>108 &rarr; 836</dt><dd>average FPS, same 64 chunk distance</dd></div><div><dt>48 s &rarr; 1.5 s</dt><dd>world load time</dd></div><div><dt>200</dt><dd>chunk render distance, up from 64</dd></div><div><dt>1,353</dt><dd>FPS at 200 chunks, 1080p</dd></div></dl>
+<div class="cs-body" id="built"><div><h2>What I built</h2><ul class="ticks"><li>Built an infinite procedural world on a chunk-based system.</li><li>Implemented real-time directional sunlight with voxel-cast shadows.</li><li>Created interactive block modification so players can change the terrain.</li><li>Implemented AABB collision for reliable movement through voxel terrain.</li><li>Added greedy meshing and per-vertex ambient occlusion.</li><li>Merged the whole world into one big indirect draw instead of a draw per chunk.</li><li>Split chunks into 16x16x16 pieces so whole regions can be culled at once.</li><li>Added LODs so distant terrain is drawn at lower detail, which let me raise the render distance from 64 to 200 chunks.</li><li>Moved world generation and meshing onto background threads.</li><li>Added world saves, so the blocks you change stay changed.</li><li>Wrote a benchmark that flies, spins and edits the world, then logs FPS, frame times and memory to a CSV.</li><li>Same 64 chunk distance, before and after: loading went from 48 s to 1.5 s and average FPS from 108 to 836. At 200 chunks it averages 1,353 FPS at 1080p on an RX 9060 XT.</li></ul></div>
+<div><h2>My role</h2><p>A practical exploration of low-level rendering and engine development. Rather than relying on a pre-built world system, I implemented the core systems needed to create and interact with a large voxel environment. Later I went back to see how far I could push performance. I wrote a benchmark first so I could tell whether each change actually helped.</p><h2 class="gap">What I learned</h2><p>C++, OpenGL rendering, procedural systems, spatial organisation and lighting, and the challenges of building engine functionality from scratch. Going back to optimise it taught me to measure first and only keep the changes that make a real difference.</p></div></div>
+<section class="tight" id="how"><h2>How it works</h2><div class="how"><div><h3>Measure first</h3><p>Before optimising anything I wrote a benchmark that loads the world, flies a fixed route, spins on the spot and edits blocks, then appends load time, average FPS, 1% lows, draw calls and memory to a CSV. Every change below was kept or thrown away based on that log, which now holds 74 runs.</p></div><div><h3>One draw instead of thousands</h3><p>The first benchmark showed 5,839 draw calls a frame at a 64 chunk distance. Chunk meshes now live in a shared pool and the whole world is submitted as a list of indirect draw commands, so the GPU walks the list instead of the CPU issuing a draw per chunk. That one change took the benchmark from 108 to 988 FPS.</p></div><div><h3>Greedy meshing and 16-byte vertices</h3><p>Neighbouring faces with the same texture and lighting are merged into the largest rectangle possible. Each vertex is packed into 16 bytes, and because a merged quad can be several blocks wide, texture coordinates are stored in blocks and the shader repeats the atlas tile with fract().</p></div><div><h3>Sections and culling</h3><p>Chunks are split into 16x16x16 sections, which cut block memory in the benchmark from 1,056 MB to 81 MB and lets whole regions be culled at once. Faces are also grouped by the direction they point, so groups facing away from the camera are never sent to the GPU.</p></div><div><h3>LODs and far terrain</h3><p>Level-of-detail meshes took the 200 chunk benchmark from 129 to 1,353 FPS. A separate far-terrain pass has since pushed the render distance to 1,000 chunks at roughly 990 FPS, with the world loading in about 7 seconds.</p></div></div><figure class="bars"><figcaption>Benchmark results, step by step</figcaption><div class="bar"><span>64 chunks: baseline</span><div><i style="width:7.0%"></i><b>108 FPS</b></div><small>5,839 draw calls, 48 s load</small></div><div class="bar"><span>64 chunks: one merged indirect draw</span><div><i style="width:64.2%"></i><b>988 FPS</b></div><small>1 draw call</small></div><div class="bar"><span>64 chunks: 16x16x16 sections and region culling</span><div><i style="width:55.1%"></i><b>848 FPS</b></div><small>block memory 1,056 MB to 81 MB, 3 s load</small></div><div class="bar"><span>200 chunks: first run</span><div><i style="width:8.4%"></i><b>129 FPS</b></div><small>146 s load</small></div><div class="bar"><span>200 chunks: LODs</span><div><i style="width:87.9%"></i><b>1,353 FPS</b></div><small>17 s load</small></div><div class="bar"><span>200 chunks: face-direction culling</span><div><i style="width:100.0%"></i><b>1,540 FPS</b></div><small>3.5 s load</small></div><div class="bar"><span>1,000 chunks: far terrain</span><div><i style="width:64.3%"></i><b>990 FPS</b></div><small>7 s load</small></div><p class="muted">Average FPS in the benchmark&#x27;s spin test at 1080p on an RX 9060 XT, taken from the project&#x27;s benchmark log.</p></figure></section><section class="tight" id="code"><h2>Code</h2><p class="muted">Short excerpts from the project, written by me.</p><figure class="code"><figcaption><b>Greedy meshing: merging faces into rectangles</b><span>Chunk.cpp</span></figcaption><pre tabindex="0"><code>// 2. Greedy merge: grow each unclaimed cell into the biggest rectangle of identical cells
+for (int b = 0; b &lt; size[v]; b++) {
+    for (int a = 0; a &lt; size[u];) {
+        uint32_t cell = mask[a + b * size[u]];
+        if (cell == 0) { a++; continue; }
+
+        // Grow along u while the cells match
+        int width = 1;
+        while (a + width &lt; size[u] &amp;&amp; mask[a + width + b * size[u]] == cell) {
+            width++;
+        }
+
+        // Grow along v while every cell in the next row matches
+        int height = 1;
+        bool rowMatches = true;
+        while (b + height &lt; size[v] &amp;&amp; rowMatches) {
+            for (int k = 0; k &lt; width; k++) {
+                if (mask[a + k + (b + height) * size[u]] != cell) { rowMatches = false; break; }
+            }
+            if (rowMatches) height++;
+        }
+
+        // Faces pointing + sit on the far side of the block
+        glm::ivec3 origin(0);
+        origin[axis] = slice + (direction &gt; 0 ? 1 : 0);
+        origin[u] = a;
+        origin[v] = b;
+        addQuad(mesh, origin * scale, uStep * (width * scale), vStep * (height * scale), direction, face, cell);
+
+        // Claim the cells so they aren&#x27;t used again
+        for (int h = 0; h &lt; height; h++) {
+            for (int k = 0; k &lt; width; k++) {
+                mask[a + k + (b + h) * size[u]] = 0;
+            }
+        }
+        a += width;
+    }
+}</code></pre><p>Each cell of the mask encodes texture and ambient occlusion in one integer, so &#x27;can these faces merge?&#x27; is a single comparison.</p></figure><figure class="code"><figcaption><b>Skipping faces that point away from the camera</b><span>Renderer.cpp</span></figcaption><pre tabindex="0"><code>for (const VisibleSection&amp; entry : visibleSections) {
+    // A face pointing +X can only be seen from its +X side. Every +X face in this mesh is at or past min.x,
+    // so with the viewer at or before min.x none of them can be: the whole group is skipped
+    // From the sun every face in a group points the same way relative to it, so it&#x27;s all or nothing
+    bool visible[faceGroupCount];
+    if (viewPoint) {
+        visible[NegXFaces] = viewPoint-&gt;x &lt; entry.max.x;
+        visible[PosXFaces] = viewPoint-&gt;x &gt; entry.min.x;
+        visible[NegZFaces] = viewPoint-&gt;z &lt; entry.max.y;
+        visible[PosZFaces] = viewPoint-&gt;z &gt; entry.min.y;
+    }
+    else {
+        visible[NegXFaces] = viewDirection.x &gt; 0.0f;//a -X face faces the viewer when the viewer looks along +X
+        visible[PosXFaces] = viewDirection.x &lt; 0.0f;
+        visible[NegZFaces] = viewDirection.z &gt; 0.0f;
+        visible[PosZFaces] = viewDirection.z &lt; 0.0f;
+    }
+    visible[VerticalFaces] = true;
+
+// ...
+
+        GLsizei count = mesh.groupCounts[g];
+        if (count == 0) continue;
+        if (visible[g]) {
+            if (runLength == 0) runStart = groupStart;
+            runLength += gap + count;//the hidden groups in between come along
+            gap = 0;
+        }
+        else if (runLength &gt; 0 &amp;&amp; gap + count &lt; splitAtLeast) {
+            gap += count;//maybe drawn, if another visible group follows
+        }
+        else {
+            addRun();//too much hidden in between, split
+            gap = 0;
+        }
+        groupStart += count;
+    }
+    addRun();//a hidden gap at the end is just left off
+}</code></pre><p>A small hidden group between two visible ones is drawn anyway. A draw call costs about as much as 400 triangles, so splitting around fewer than that would make things slower.</p></figure></section>
+<section class="tight" id="play"><h2>Play it</h2><iframe src="https://itch.io/embed/4197600?dark=true" width="552" height="167" title="Voxel World Prototype on itch.io" loading="lazy"><a href="https://allanowo.itch.io/voxel-world-prototype">Voxel World Prototype by Allan</a></iframe></section>
+<nav class="next" aria-label="Next project"><span class="muted">Next project</span><a href="asteroids.html">Asteroids &rarr;</a></nav></div>
+<section id="contact"><div class="wrap"><div class="cta"><div><h2>Like what you see?</h2><p>I'm looking for my first games industry role as a gameplay or AI programmer. Studios of any size welcome.</p></div>
+<div><a class="mail" href="mailto:allanjwb@gmail.com">allanjwb@gmail.com</a><p class="links"><a href="Allan_Blyth_CV.pdf">CV (PDF)</a><a href="https://www.linkedin.com/in/allan-blyth-32977b403/">LinkedIn</a><a href="https://github.com/allanOwO">GitHub</a><a href="https://allanowo.itch.io">itch.io</a></p></div></div></div></section></main>
+<footer><div class="wrap foot"><span>&copy; 2026 Allan Blyth. Gameplay programmer, Scotland.</span><span><a href="mailto:allanjwb@gmail.com">Email</a><a href="https://www.linkedin.com/in/allan-blyth-32977b403/">LinkedIn</a><a href="https://github.com/allanOwO">GitHub</a><a href="https://allanowo.itch.io">itch.io</a><a href="Allan_Blyth_CV.pdf">CV</a></span></div></footer>
+<dialog class="lightbox" aria-label="Screenshot"><img alt=""><button type="button" aria-label="Close">&times;</button></dialog>
+<script src="script.js"></script></body></html>

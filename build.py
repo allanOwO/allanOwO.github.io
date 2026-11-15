@@ -1,6 +1,7 @@
 """Regenerates every page from the PROJECTS list. Edit the data, run: python build.py"""
-import html
+import html,json,os,re
 E=html.escape
+BASE="https://allanowo.github.io/"
 NAME="Allan Blyth"; EMAIL="allanjwb@gmail.com"; CV="Allan_Blyth_CV.pdf"
 ITCH="https://allanowo.itch.io"; LI="https://www.linkedin.com/in/allan-blyth-32977b403/"; GH="https://github.com/allanOwO"
 def P(slug,title,kind,meta,summary,cover,group,tags,role,bullets,learned,itch,label,video="",yt="",play=""):
@@ -16,7 +17,7 @@ P("kyomen","Kyomen","Isometric action roguelike","Programmer, Marmot Studios | G
 P("ballad-of-auld-dunrod","The Ballad of Auld Dunrod","Third-person stealth exploration","Programming Lead | Client project for a comic book publisher | Browser game",
  "A third-person stealth exploration game based on a Scottish folklore poem, in which the player helps Dunrod escape capture.",
  "https://img.itch.zone/aW1nLzIwNzE2NDY4LnBuZw==/original/e%2BdR4d.png","unity",["Unity","C#","WebGL","Stealth AI"],
- "I led the programming team and wrote around 90% of the game's code myself, from the stealth AI to the camera, UI and touch controls. I also coordinated the technical work, prioritised features, and made sure the game was stable and complete enough to deliver as a client project.",
+ "I led the programming team and wrote around 70% of the game's code myself, including nearly all of the guard AI, the camera, the game manager and the touch joystick. I also coordinated the technical work, prioritised features, and made sure the game was stable and complete enough to deliver as a client project.",
  ["Built the guard AI: a patrol, investigate and chase state machine with view-cone detection and an alert meter.","Added rooftop lookouts that sweep an area and call nearby guards when they spot the player.","Built a top-down camera that follows the player along a looping dolly track, finding the closest point on the path and recovering cleanly when the player respawns.","Wrote the touch controls, including a virtual joystick, so the game plays on phones and school iPads.","Added a fairy guide that pathfinds to the next objective and leaves a particle trail, plus a map that tracks progress.","Optimised for mobile browsers by culling lights outside the camera's view."],
  "Owning most of a codebase while still leading a team: prioritising, keeping systems simple enough for others to build on, optimising for the browser, and delivering against a clear client-facing goal.",
  "3041421","https://gcugames.itch.io/ballad-of-auld-dunrod|Ballad of Auld Dunrod by Glasgow Caledonian University, Patricija Gudynaite, Blitz_Maxis, SkrubJG, Allan, Bishop",yt="uGwDVG2_ZKo",play="dunrod"),
@@ -64,46 +65,146 @@ P("asteroids","Asteroids","Space shooter prototype","Solo programmer | C++ | Ope
  "Real-time rendering, procedural content, gameplay feedback, and how technical constraints can set a consistent visual identity.",
  "5002358","https://allanowo.itch.io/asteroids|Asteroids by Allan"),
 ]
+# Images live in img/ as <slug>-cover.<ext> and <slug>-1.<ext>, <slug>-2.<ext>... The first screenshot is the page's main image.
+IMGS=sorted(os.listdir("img"))
+def shots(p): return sorted(("img/"+f for f in IMGS if re.fullmatch(re.escape(p["slug"])+r"-\d+\.\w+",f)),key=lambda f:int(re.search(r"-(\d+)\.",f).group(1)))
+for p in PROJECTS: p["cover"]=next("img/"+f for f in IMGS if f.startswith(p["slug"]+"-cover."))
+# Technical breakdowns. how: (heading, text). flow: steps of a diagram. pairs: (left, right) rows.
+# bars: (title, [(label, number, extra note)], footnote). code: (title, file in code/, source file name, why it is written this way)
+DEEP={
+"kyomen":dict(
+ how=[("Phase transitions as set pieces","Every time the boss crosses a health threshold it stops what it is doing, travels to the centre of the arena and runs one set-piece attack before the next phase begins. Which attack plays is decided by the phase being left, not by the threshold number. Each one is the outgoing phase's idea pushed further, so the pairing stays right even when the phase order is shuffled."),
+  ("Invulnerable without feeling broken","The boss cannot be hurt during a transition. Instead of letting hits pass through it, the health bar goes grey and hits still land with all their usual feedback but read 0. The player can see their attacks are registering and simply doing nothing, rather than wondering if the game has bugged out."),
+  ("Telegraphs that match the hit","Every ground telegraph is built from the same numbers the hit check uses, so the red area is exactly the area that hurts. Shapes are flat convex polygons (circle, cone, lane, trapezoid) drawn as a faint base, a fill that grows out from the attack's origin, and a border drawn inside the true edge so it never overstates the danger."),
+  ("Patterns that are always escapable","The Bomber Barrage lobs explosive enemies onto a 5 by 5 tile grid using patterns a designer can author in the Inspector. Each pattern is checked before it is used: every targeted tile must have a safe tile directly beside it. A pattern that fails is skipped with a warning instead of producing an unfair hit.")],
+ flowtitle="One phase transition",
+ flow=["Health crosses a threshold","Shield up, health bar greys","Boss moves to arena centre","Wind-up pose","Set-piece attack","Recover","Next phase begins"],
+ pairs=[("Leaving melee","Quadrant Strike: wedges of the floor light up and are struck, then the centre tiles drop"),("Leaving ranged","Rotating Lanes: radial lanes of shots that rotate after every pulse"),("Leaving explosive","Bomber Barrage: explosive enemies land on tiles, fizz and go off"),("Leaving charge","Lane Charges: staggered charges down lanes near the player")],
+ code_stashed=[("Running a phase transition","kyomen-phase-transition.cs","BossPhaseTransitions.cs","One coroutine owns the whole sequence, so the order of events reads top to bottom and there is a single place to abort it if the boss is reset or killed mid-transition."),
+  ("Rejecting unfair bomb patterns","kyomen-escapable.cs","BossPhaseTransitions.cs","Designers can add patterns freely because the code refuses any that would trap the player. Fairness is enforced by a rule, not by remembering to playtest every pattern."),
+  ("Growing the telegraph fill","kyomen-telegraph.cs","FillIndicator.cs","Most shapes fill by scaling a mesh. A trapezoid cannot, because scaling would push the fill outside its slanted sides, so its far corners are walked along the edges instead.")]),
+"ballad-of-auld-dunrod":dict(
+ how=[("Cheap checks first","The game had to run in a mobile browser on school iPads, so guard vision does its cheapest tests first. It compares squared distances to skip the square root, then tests the view cone with a single dot product against a cosine worked out once at start-up. Only a target that passes both pays for a physics raycast to confirm line of sight. A small near circle means the player cannot stand right behind a guard unnoticed."),
+  ("An alert meter, not an instant fail","Being seen does not start a chase straight away. An alert meter fills while the player is in view and drains when they break line of sight, and the chase begins only once it is full. That gives the player a moment to react and makes close calls feel fair. Thrown cheese takes priority over the player, so it works as a reliable distraction."),
+  ("A camera on a looping track","The top-down camera rides a dolly track that loops around the level. The track is sampled once at start-up, and each update only considers the samples within a few metres of the camera's last position, 20 times a second instead of every frame. Because the track loops, the cart always travels the short way round, and when the player respawns somewhere else the camera does one full search to snap to the right place.")],
+ flowtitle="Guard behaviour",
+ flow=["Walk the patrol route","Turn and inspect at waypoints","Player seen: alert meter fills","Chase","Lose the player: reset","Walk back to the route"],
+ code=[("Can this guard see the target?","dunrod-vision.cs","GuardVision.cs","Ordered from cheapest test to most expensive, so most guards on most frames never reach the raycast."),
+  ("Following the player around a looping track","dunrod-dolly.cs","DollyFollowPlayer.cs","Without the wrap check, crossing the start of the loop would send the camera the long way round the whole level.")]),
+"voxel-world":dict(
+ how=[("Measure first","Before optimising anything I wrote a benchmark that loads the world, flies a fixed route, spins on the spot and edits blocks, then appends load time, average FPS, 1% lows, draw calls and memory to a CSV. Every change below was kept or thrown away based on that log, which now holds 74 runs."),
+  ("One draw instead of thousands","The first benchmark showed 5,839 draw calls a frame at a 64 chunk distance. Chunk meshes now live in a shared pool and the whole world is submitted as a list of indirect draw commands, so the GPU walks the list instead of the CPU issuing a draw per chunk. That one change took the benchmark from 108 to 988 FPS."),
+  ("Greedy meshing and 16-byte vertices","Neighbouring faces with the same texture and lighting are merged into the largest rectangle possible. Each vertex is packed into 16 bytes, and because a merged quad can be several blocks wide, texture coordinates are stored in blocks and the shader repeats the atlas tile with fract()."),
+  ("Sections and culling","Chunks are split into 16x16x16 sections, which cut block memory in the benchmark from 1,056 MB to 81 MB and lets whole regions be culled at once. Faces are also grouped by the direction they point, so groups facing away from the camera are never sent to the GPU."),
+  ("LODs and far terrain","Level-of-detail meshes took the 200 chunk benchmark from 129 to 1,353 FPS. A separate far-terrain pass has since pushed the render distance to 1,000 chunks at roughly 990 FPS, with the world loading in about 7 seconds.")],
+ bars=("Benchmark results, step by step",[("64 chunks: baseline",108,"5,839 draw calls, 48 s load"),("64 chunks: one merged indirect draw",988,"1 draw call"),("64 chunks: 16x16x16 sections and region culling",848,"block memory 1,056 MB to 81 MB, 3 s load"),("200 chunks: first run",129,"146 s load"),("200 chunks: LODs",1353,"17 s load"),("200 chunks: face-direction culling",1540,"3.5 s load"),("1,000 chunks: far terrain",990,"7 s load")],
+  "Average FPS in the benchmark's spin test at 1080p on an RX 9060 XT, taken from the project's benchmark log."),
+ code=[("Greedy meshing: merging faces into rectangles","voxel-greedy.cpp","Chunk.cpp","Each cell of the mask encodes texture and ambient occlusion in one integer, so 'can these faces merge?' is a single comparison."),
+  ("Skipping faces that point away from the camera","voxel-drawlist.cpp","Renderer.cpp","A small hidden group between two visible ones is drawn anyway. A draw call costs about as much as 400 triangles, so splitting around fewer than that would make things slower.")]),
+}
+def deep(p):
+    d=DEEP.get(p["slug"])
+    if not d: return ""
+    h='<section class="tight" id="how"><h2>How it works</h2><div class="how">'+"".join(f"<div><h3>{E(a)}</h3><p>{E(b)}</p></div>" for a,b in d["how"])+"</div>"
+    if d.get("flow"): h+=f'<figure class="flow"><figcaption>{E(d["flowtitle"])}</figcaption><ol>'+"".join(f"<li>{E(x)}</li>" for x in d["flow"])+"</ol></figure>"
+    if d.get("pairs"): h+='<dl class="pairs">'+"".join(f"<div><dt>{E(a)}</dt><dd>{E(b)}</dd></div>" for a,b in d["pairs"])+"</dl>"
+    if d.get("bars"):
+        t,rows,note=d["bars"]; top=max(r[1] for r in rows)
+        h+=f'<figure class="bars"><figcaption>{E(t)}</figcaption>'+"".join(f'<div class="bar"><span>{E(l)}</span><div><i style="width:{v/top*100:.1f}%"></i><b>{v:,} FPS</b></div><small>{E(x)}</small></div>' for l,v,x in rows)+f'<p class="muted">{E(note)}</p></figure>'
+    h+="</section>"
+    if d.get("code"):
+        h+='<section class="tight" id="code"><h2>Code</h2><p class="muted">Short excerpts from the project, written by me.</p>'+"".join(f'<figure class="code"><figcaption><b>{E(t)}</b><span>{E(src)}</span></figcaption><pre tabindex="0"><code>{E(open("code/"+f,encoding="utf-8").read().rstrip())}</code></pre><p>{E(why)}</p></figure>' for t,f,src,why in d["code"])+"</section>"
+    return h
+# Headline numbers shown as a strip at the top of a project page: (number, label)
+STATS={
+"kyomen":[("4","boss phases"),("4","enemy types"),("5","person team"),("Steam","release in progress")],
+"ballad-of-auld-dunrod":[("~70%","of the code written by me"),("Lead","of the programming team"),("WebGL","runs on phones and iPads"),("Client","project, delivered")],
+"voxel-world":[("108 &rarr; 836","average FPS, same 64 chunk distance"),("48 s &rarr; 1.5 s","world load time"),("200","chunk render distance, up from 64"),("1,353","FPS at 200 chunks, 1080p")],
+"chill-fishing-game":[("48","hours, concept to release"),("5","person team"),("GGJ","Global Game Jam 2025")],
+}
+TEAM={"kyomen":"5 people","ballad-of-auld-dunrod":"8 people","tower-of-tales":"6 people","bob-steve":"5 people","chill-fishing-game":"5 people","voxel-world":"Solo","asteroids":"Solo"}
+SKILLS=[("Languages","C#, C++"),("Engines and graphics","Unity, OpenGL, WebGL builds"),("Gameplay and AI","State machines, boss and enemy behaviour, attack systems, weighted randomness, coroutine-based timing"),("Also","Git, controller input, JSON, Gemini API integration")]
 PLAYNOTE={"dunrod":"Built for touch screens: drag the on-screen joystick with your finger or mouse."}
-def page(title,desc,img,body,path="",cls=""):
+ICON="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23ff4d5e'/%3E%3Cpath d='M8 24 16 8l8 16' fill='none' stroke='%2315111f' stroke-width='4'/%3E%3C/svg%3E"
+def role(p): return p["meta"].split(" | ")[0]
+def context(p): return "Personal project" if p["group"]=="gl" else ", ".join(p["meta"].split(" | ")[1:])
+def page(title,desc,img,body,path="",ld=""):
+    url=BASE+path
     return f'''<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{E(title)}</title><meta name="description" content="{E(desc)}">
-<meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:image" content="{E(img)}"><meta name="theme-color" content="#15111f">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23ff4d5e'/%3E%3Cpath d='M8 24 16 8l8 16' fill='none' stroke='%2315111f' stroke-width='4'/%3E%3C/svg%3E">
+<title>{E(title)}</title><meta name="description" content="{E(desc)}"><link rel="canonical" href="{url}">
+<meta property="og:type" content="website"><meta property="og:url" content="{url}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:image" content="{BASE}{E(img)}">
+<meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#15111f">
+<link rel="icon" href="{ICON}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="style.css"></head><body>
-<div class="hp"><div class="hp-in"><span class="hp-label" aria-hidden="true">Phase 1 of 4</span><div class="hp-bar" aria-hidden="true"><i class="hp-lag"></i><i class="hp-fill"></i></div><nav aria-label="Main"><a href="index.html">Home</a><a href="index.html#work">Work</a><a href="index.html#contact">Contact</a></nav></div></div>
-<main>{body}</main>
-<footer><div class="wrap">&copy; 2026 {NAME}. Gameplay programmer, Scotland.</div></footer><script src="script.js"></script></body></html>'''
-def card(p):
-    return f'<a class="card" href="{p["slug"]}.html"><img src="{p["cover"]}" alt="{E(p["title"])} cover image" loading="lazy"><h3>{E(p["title"])}</h3><p>{E(p["kind"])}. {E(p["bullets"][0])}</p></a>'
+<link rel="stylesheet" href="style.css">{ld}</head><body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="top-in"><a class="brand" href="index.html">{NAME}<span>Gameplay programmer</span></a>
+<nav aria-label="Main"><a href="index.html#work">Work</a><a href="index.html#about">About</a><a href="index.html#contact">Contact</a><a class="cv" href="{CV}">CV</a></nav></div>
+<div class="hp-bar" aria-hidden="true"><i class="hp-lag"></i><i class="hp-fill"></i></div></header>
+<main id="main">{body}</main>
+<footer><div class="wrap foot"><span>&copy; 2026 {NAME}. Gameplay programmer, Scotland.</span><span><a href="mailto:{EMAIL}">Email</a><a href="{LI}">LinkedIn</a><a href="{GH}">GitHub</a><a href="{ITCH}">itch.io</a><a href="{CV}">CV</a></span></div></footer>
+<dialog class="lightbox" aria-label="Screenshot"><img alt=""><button type="button" aria-label="Close">&times;</button></dialog>
+<script src="script.js"></script></body></html>'''
 def tags(p): return '<ul class="tags">'+"".join(f"<li>{E(t)}</li>" for t in p["tags"])+"</ul>"
+def badges(p):
+    b=('<li class="b-play">Play in browser</li>' if p["play"] else "")+('<li>Trailer</li>' if p["yt"] or p["video"] else "")
+    return f'<ul class="badges">{b}</ul>' if b else ""
+def card(p):
+    return f'''<a class="card" href="{p["slug"]}.html"><div class="thumb"><img src="{p["cover"]}" alt="" loading="lazy">{badges(p)}</div>
+<p class="kicker">{E(p["kind"])}</p><h3>{E(p["title"])}</h3><p class="card-role">{E(role(p))} &middot; {E(TEAM[p["slug"]])}</p><p>{E(p["bullets"][0])}</p>{tags(p)}</a>'''
+def stats(p):
+    s=STATS.get(p["slug"])
+    return '<dl class="stats">'+"".join(f"<div><dt>{n}</dt><dd>{E(l)}</dd></div>" for n,l in s)+"</dl>" if s else ""
+def feat(p,img,flip=False):
+    pts=[f"{n} {l}" for n,l in STATS[p["slug"]][:3]] if flip else [E(x) for x in p["bullets"][:3]]
+    return f'''<div class="feat{" flip" if flip else ""}"><a class="feat-img" href="{p["slug"]}.html"><img src="{img}" alt="{E(p["title"])} screenshot" loading="lazy"></a><div><p class="card-role">{E(role(p))} &middot; {E(context(p))}</p><p>{E(p["summary"])}</p>
+<ul class="ticks">{"".join(f"<li>{x}</li>" for x in pts)}</ul>{tags(p)}<a class="btn main" href="{p["slug"]}.html">Read the case study</a></div></div>'''
 def index():
-    k=PROJECTS[0]; g=lambda n:"".join(card(p) for p in PROJECTS if p["group"]==n)
-    b=f'''<div class="wrap"><div class="hero"><h1>Bosses that fight back.</h1>
-<p>I'm Allan, a gameplay programmer specialising in enemy AI and multi-phase boss systems in Unity and C#. 2:1 in Games Development from Glasgow Caledonian University, co-founder of Marmot Studios Ltd, and also a C++/OpenGL engine programmer.</p>
-<div class="btns"><a class="btn main" href="{CV}">Download CV</a><a class="btn" href="{k["slug"]}.html">See the Kyomen boss</a><a class="btn" href="mailto:{EMAIL}">Email me</a></div></div></div>
-<section id="work"><div class="wrap"><h2>Featured</h2><div class="feat"><div><h3>{k["title"]}</h3><p>{E(k["summary"])}</p>{tags(k)}<a class="btn main" href="{k["slug"]}.html">Read the case study</a></div><img src="{k["cover"]}" alt="Kyomen cover image"></div></div></section>
-<section><div class="wrap"><h2>Unity and gameplay</h2><div class="grid">{g("unity")}</div>
-<p class="muted" style="margin-top:32px">Also: an AI Recap System that uses the Gemini API to turn in-game data into dynamic play-session recaps, built in Unity with structured JSON.</p></div></section>
-<section><div class="wrap"><h2>C++ and OpenGL</h2><div class="grid">{g("gl")}</div></div></section>
-<section id="contact"><div class="wrap about"><div><h2>Get in touch</h2><p>I'm looking for my first games industry role. Studios of any size welcome.</p></div>
-<div><p><a href="mailto:{EMAIL}">{EMAIL}</a></p><p><a href="{LI}">LinkedIn</a> / <a href="{GH}">GitHub</a> / <a href="{ITCH}">itch.io</a> / <a href="{CV}">CV (PDF)</a></p></div></div></section>'''
-    return page(f"{NAME} | Gameplay Programmer","Gameplay programmer specialising in enemy AI and multi-phase boss systems in Unity/C#, with C++/OpenGL engine experience.",k["cover"],b)
+    k=PROJECTS[0]; ks=shots(k); v=next(p for p in PROJECTS if p["slug"]=="voxel-world")
+    nplay=sum(1 for p in PROJECTS if p["play"])
+    b=f'''<div class="wrap hero"><div><p class="eyebrow"><i></i>Open to work &middot; Scotland / remote</p><h1>Bosses that fight back.</h1>
+<p class="lede">I'm Allan, a gameplay programmer specialising in enemy AI and multi-phase boss systems in Unity and C#. I also build engine tech in C++ and OpenGL.</p>
+<div class="btns"><a class="btn main" href="#work">See my work</a><a class="btn" href="{CV}">Download CV</a><a class="btn" href="mailto:{EMAIL}">Email me</a></div></div>
+<a class="hero-shot" href="{k["slug"]}.html"><img src="{ks[0]}" alt="Kyomen gameplay screenshot" fetchpriority="high"><span><b>Kyomen</b> Four-phase boss fight, heading to Steam &rarr;</span></a></div>
+<div class="wrap"><ul class="facts"><li><b>BSc (Hons) 2:1</b>Games Development, Glasgow Caledonian University, 2026</li><li><b>Co-founder</b>Marmot Studios Ltd, taking Kyomen to Steam</li><li><b>{len(PROJECTS)} shipped projects</b>{nplay} playable right here in your browser</li><li><b>C# and C++</b>Unity gameplay and OpenGL engine work</li></ul></div>
+<section id="work"><div class="wrap"><p class="kicker">Selected work</p><h2>Featured: {k["title"]}</h2>{feat(k,ks[1])}</div></section>
+<section class="tight"><div class="wrap"><h2>Engine work: {v["title"]}</h2>{feat(v,shots(v)[0],True)}</div></section>
+<section><div class="wrap"><h2>More projects</h2><div class="grid">{"".join(card(p) for p in PROJECTS if p not in (k,v))}</div></div></section>
+<section id="about"><div class="wrap about"><div><p class="kicker">About</p><h2>I make enemies worth fighting.</h2>
+<p>I graduated in 2026 with a 2:1 in Games Development from Glasgow Caledonian University. Most of my work is combat: enemy behaviour, encounter pacing, and boss fights that react to the player while staying readable enough to feel fair.</p>
+<p>After Global Game Jam 2026, the five of us who made Kyomen formed Marmot Studios Ltd to take it to Steam. I work on the gameplay and boss programming, and handled the early company and Steamworks setup.</p>
+<p>Outside Unity I write C++ and OpenGL, including a voxel engine I profiled and optimised from 108 to 836 FPS. I've also built an AI Recap System that uses the Gemini API to turn in-game data into play-session recaps, driven by structured JSON from Unity.</p>
+<div class="btns"><a class="btn main" href="{CV}">Download CV</a><a class="btn" href="{LI}">LinkedIn</a></div></div>
+<dl class="skills">{"".join(f"<div><dt>{E(a)}</dt><dd>{E(b)}</dd></div>" for a,b in SKILLS)}<div><dt>Experience</dt><dd>Co-founder and Programmer, Marmot Studios Ltd, 2026 to present</dd></div><div><dt>Education</dt><dd>BSc (Hons) Games Development, 2:1, Glasgow Caledonian University, 2022 to 2026</dd></div></dl></div></section>
+{contact("Get in touch")}'''
+    ld='<script type="application/ld+json">'+json.dumps({"@context":"https://schema.org","@type":"Person","name":NAME,"jobTitle":"Gameplay Programmer","url":BASE,"email":"mailto:"+EMAIL,"sameAs":[LI,GH,ITCH],"alumniOf":"Glasgow Caledonian University"})+"</script>"
+    return page(f"{NAME} | Gameplay Programmer","Gameplay programmer specialising in enemy AI and multi-phase boss systems in Unity/C#, with C++/OpenGL engine experience. Open to work.",ks[0],b,"",ld)
+def contact(h):
+    return f'''<section id="contact"><div class="wrap"><div class="cta"><div><h2>{h}</h2><p>I'm looking for my first games industry role as a gameplay or AI programmer. Studios of any size welcome.</p></div>
+<div><a class="mail" href="mailto:{EMAIL}">{EMAIL}</a><p class="links"><a href="{CV}">CV (PDF)</a><a href="{LI}">LinkedIn</a><a href="{GH}">GitHub</a><a href="{ITCH}">itch.io</a></p></div></div></div></section>'''
 def case(p):
-    url,lab=p["label"].split("|")
+    url,lab=p["label"].split("|"); ss=shots(p)
     vid=f'<video controls muted loop playsinline src="{p["video"]}"></video>' if p["video"] else ""
     if p["yt"]: vid+=f'<div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/{p["yt"]}" title="{E(p["title"])} gameplay video" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>'
+    if vid: vid=f'<section class="tight"><h2>Trailer</h2>{vid}</section>'
     n=PROJECTS[(PROJECTS.index(p)+1)%len(PROJECTS)]
-    web=f'''<div class="play" data-game="{p["play"]}" data-title="{E(p["title"])}"><img src="{p["cover"]}" alt="" loading="lazy"><button class="btn main" type="button">Play in browser</button></div>
+    web=f'''<div class="play" data-game="{p["play"]}" data-title="{E(p["title"])}"><img src="{ss[0] if ss else p["cover"]}" alt="" loading="lazy"><button class="btn main" type="button">&#9654; Play in browser</button></div>
 <p class="muted play-note">Runs in your browser, no download. {PLAYNOTE.get(p["play"],"Best on desktop with a keyboard and mouse.")} <button class="link" type="button" data-fs hidden>Fullscreen</button></p>''' if p["play"] else ""
-    b=f'''<div class="wrap"><div class="cs-head"><div><a href="index.html">&larr; All projects</a><h1>{E(p["title"])}</h1><p class="muted">{E(p["meta"])}</p><p>{E(p["summary"])}</p>{tags(p)}</div><img class="cover" src="{p["cover"]}" alt="{E(p["title"])} cover image"></div>
-{vid}<div class="cs-body"><div><h2>My role</h2><p>{E(p["role"])}</p><h2 style="margin-top:32px">What I learned</h2><p>{E(p["learned"])}</p></div>
-<div><h2>What I built</h2><ul>{"".join(f"<li>{E(x)}</li>" for x in p["bullets"])}</ul></div></div>
-<section><h2>Play it</h2>{web}<iframe src="https://itch.io/embed/{p["itch"]}?dark=true" width="552" height="167" title="{E(p["title"])} on itch.io" loading="lazy"><a href="{url}">{E(lab)}</a></iframe></section>
-<nav class="next" aria-label="Next project"><span class="muted">Next project</span><a href="{n["slug"]}.html">{E(n["title"])} &rarr;</a></nav></div>'''
-    return page(f'{p["title"]} | {NAME}',p["summary"],p["cover"],b)
+    gal=f'<section class="tight"><h2>Screenshots</h2><div class="gallery">{"".join(f"""<a href="{s}"><img src="{s}" alt="{E(p["title"])} screenshot {i+1}" loading="lazy"></a>""" for i,s in enumerate(ss))}</div></section>' if len(ss)>1 else ""
+    jump='<a class="btn main" href="#play">&#9654; Play in browser</a>' if p["play"] else f'<a class="btn main" href="{url}">View on itch.io</a>'
+    b=f'''<div class="wrap"><div class="cs-head"><div><a class="back" href="index.html#work">&larr; All projects</a><p class="kicker">{E(p["kind"])}</p><h1>{E(p["title"])}</h1><p class="lede">{E(p["summary"])}</p>
+<div class="btns">{jump}<a class="btn" href="#built">What I built</a>{"<a class=btn href=#code>See the code</a>" if DEEP.get(p["slug"],{}).get("code") else ""}</div></div><img class="cover" src="{ss[0] if ss else p["cover"]}" alt="{E(p["title"])} screenshot" fetchpriority="high"></div>
+<dl class="meta"><div><dt>Role</dt><dd>{E(role(p))}</dd></div><div><dt>Team</dt><dd>{E(TEAM[p["slug"]])}</dd></div><div><dt>Context</dt><dd>{E(context(p))}</dd></div><div><dt>Tech</dt><dd>{E(", ".join(p["tags"]))}</dd></div></dl>
+{stats(p)}
+<div class="cs-body" id="built"><div><h2>What I built</h2><ul class="ticks">{"".join(f"<li>{E(x)}</li>" for x in p["bullets"])}</ul></div>
+<div><h2>My role</h2><p>{E(p["role"])}</p><h2 class="gap">What I learned</h2><p>{E(p["learned"])}</p></div></div>
+{deep(p)}{vid}{gal}
+<section class="tight" id="play"><h2>Play it</h2>{web}<iframe src="https://itch.io/embed/{p["itch"]}?dark=true" width="552" height="167" title="{E(p["title"])} on itch.io" loading="lazy"><a href="{url}">{E(lab)}</a></iframe></section>
+<nav class="next" aria-label="Next project"><span class="muted">Next project</span><a href="{n["slug"]}.html">{E(n["title"])} &rarr;</a></nav></div>
+{contact("Like what you see?")}'''
+    return page(f'{p["title"]} | {NAME}',p["summary"],ss[0] if ss else p["cover"],b,p["slug"]+".html")
 open("index.html","w",encoding="utf-8").write(index())
 for p in PROJECTS: open(p["slug"]+".html","w",encoding="utf-8").write(case(p))
+open("sitemap.xml","w",encoding="utf-8").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+"".join(f"<url><loc>{BASE}{u}</loc></url>\n" for u in [""]+[p["slug"]+".html" for p in PROJECTS])+"</urlset>\n")

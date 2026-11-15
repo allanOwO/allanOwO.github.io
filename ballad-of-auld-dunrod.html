@@ -1,16 +1,80 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Ballad of Auld Dunrod | Allan Blyth</title><meta name="description" content="A third-person stealth exploration game based on a Scottish folklore poem, in which the player helps Dunrod escape capture.">
-<meta property="og:title" content="The Ballad of Auld Dunrod | Allan Blyth"><meta property="og:description" content="A third-person stealth exploration game based on a Scottish folklore poem, in which the player helps Dunrod escape capture."><meta property="og:image" content="https://img.itch.zone/aW1nLzIwNzE2NDY4LnBuZw==/original/e%2BdR4d.png"><meta name="theme-color" content="#15111f">
+<title>The Ballad of Auld Dunrod | Allan Blyth</title><meta name="description" content="A third-person stealth exploration game based on a Scottish folklore poem, in which the player helps Dunrod escape capture."><link rel="canonical" href="https://allanowo.github.io/ballad-of-auld-dunrod.html">
+<meta property="og:type" content="website"><meta property="og:url" content="https://allanowo.github.io/ballad-of-auld-dunrod.html"><meta property="og:title" content="The Ballad of Auld Dunrod | Allan Blyth"><meta property="og:description" content="A third-person stealth exploration game based on a Scottish folklore poem, in which the player helps Dunrod escape capture."><meta property="og:image" content="https://allanowo.github.io/img/ballad-of-auld-dunrod-1.jpg">
+<meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#15111f">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23ff4d5e'/%3E%3Cpath d='M8 24 16 8l8 16' fill='none' stroke='%2315111f' stroke-width='4'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="style.css"></head><body>
-<div class="hp"><div class="hp-in"><span class="hp-label" aria-hidden="true">Phase 1 of 4</span><div class="hp-bar" aria-hidden="true"><i class="hp-lag"></i><i class="hp-fill"></i></div><nav aria-label="Main"><a href="index.html">Home</a><a href="index.html#work">Work</a><a href="index.html#contact">Contact</a></nav></div></div>
-<main><div class="wrap"><div class="cs-head"><div><a href="index.html">&larr; All projects</a><h1>The Ballad of Auld Dunrod</h1><p class="muted">Programming Lead | Client project for a comic book publisher | Browser game</p><p>A third-person stealth exploration game based on a Scottish folklore poem, in which the player helps Dunrod escape capture.</p><ul class="tags"><li>Unity</li><li>C#</li><li>WebGL</li><li>Stealth AI</li></ul></div><img class="cover" src="https://img.itch.zone/aW1nLzIwNzE2NDY4LnBuZw==/original/e%2BdR4d.png" alt="The Ballad of Auld Dunrod cover image"></div>
-<div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/uGwDVG2_ZKo" title="The Ballad of Auld Dunrod gameplay video" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div><div class="cs-body"><div><h2>My role</h2><p>I led the programming team and wrote around 90% of the game&#x27;s code myself, from the stealth AI to the camera, UI and touch controls. I also coordinated the technical work, prioritised features, and made sure the game was stable and complete enough to deliver as a client project.</p><h2 style="margin-top:32px">What I learned</h2><p>Owning most of a codebase while still leading a team: prioritising, keeping systems simple enough for others to build on, optimising for the browser, and delivering against a clear client-facing goal.</p></div>
-<div><h2>What I built</h2><ul><li>Built the guard AI: a patrol, investigate and chase state machine with view-cone detection and an alert meter.</li><li>Added rooftop lookouts that sweep an area and call nearby guards when they spot the player.</li><li>Built a top-down camera that follows the player along a looping dolly track, finding the closest point on the path and recovering cleanly when the player respawns.</li><li>Wrote the touch controls, including a virtual joystick, so the game plays on phones and school iPads.</li><li>Added a fairy guide that pathfinds to the next objective and leaves a particle trail, plus a map that tracks progress.</li><li>Optimised for mobile browsers by culling lights outside the camera&#x27;s view.</li></ul></div></div>
-<section><h2>Play it</h2><div class="play" data-game="dunrod" data-title="The Ballad of Auld Dunrod"><img src="https://img.itch.zone/aW1nLzIwNzE2NDY4LnBuZw==/original/e%2BdR4d.png" alt="" loading="lazy"><button class="btn main" type="button">Play in browser</button></div>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="top-in"><a class="brand" href="index.html">Allan Blyth<span>Gameplay programmer</span></a>
+<nav aria-label="Main"><a href="index.html#work">Work</a><a href="index.html#about">About</a><a href="index.html#contact">Contact</a><a class="cv" href="Allan_Blyth_CV.pdf">CV</a></nav></div>
+<div class="hp-bar" aria-hidden="true"><i class="hp-lag"></i><i class="hp-fill"></i></div></header>
+<main id="main"><div class="wrap"><div class="cs-head"><div><a class="back" href="index.html#work">&larr; All projects</a><p class="kicker">Third-person stealth exploration</p><h1>The Ballad of Auld Dunrod</h1><p class="lede">A third-person stealth exploration game based on a Scottish folklore poem, in which the player helps Dunrod escape capture.</p>
+<div class="btns"><a class="btn main" href="#play">&#9654; Play in browser</a><a class="btn" href="#built">What I built</a><a class=btn href=#code>See the code</a></div></div><img class="cover" src="img/ballad-of-auld-dunrod-1.jpg" alt="The Ballad of Auld Dunrod screenshot" fetchpriority="high"></div>
+<dl class="meta"><div><dt>Role</dt><dd>Programming Lead</dd></div><div><dt>Team</dt><dd>8 people</dd></div><div><dt>Context</dt><dd>Client project for a comic book publisher, Browser game</dd></div><div><dt>Tech</dt><dd>Unity, C#, WebGL, Stealth AI</dd></div></dl>
+<dl class="stats"><div><dt>~70%</dt><dd>of the code written by me</dd></div><div><dt>Lead</dt><dd>of the programming team</dd></div><div><dt>WebGL</dt><dd>runs on phones and iPads</dd></div><div><dt>Client</dt><dd>project, delivered</dd></div></dl>
+<div class="cs-body" id="built"><div><h2>What I built</h2><ul class="ticks"><li>Built the guard AI: a patrol, investigate and chase state machine with view-cone detection and an alert meter.</li><li>Added rooftop lookouts that sweep an area and call nearby guards when they spot the player.</li><li>Built a top-down camera that follows the player along a looping dolly track, finding the closest point on the path and recovering cleanly when the player respawns.</li><li>Wrote the touch controls, including a virtual joystick, so the game plays on phones and school iPads.</li><li>Added a fairy guide that pathfinds to the next objective and leaves a particle trail, plus a map that tracks progress.</li><li>Optimised for mobile browsers by culling lights outside the camera&#x27;s view.</li></ul></div>
+<div><h2>My role</h2><p>I led the programming team and wrote around 70% of the game&#x27;s code myself, including nearly all of the guard AI, the camera, the game manager and the touch joystick. I also coordinated the technical work, prioritised features, and made sure the game was stable and complete enough to deliver as a client project.</p><h2 class="gap">What I learned</h2><p>Owning most of a codebase while still leading a team: prioritising, keeping systems simple enough for others to build on, optimising for the browser, and delivering against a clear client-facing goal.</p></div></div>
+<section class="tight" id="how"><h2>How it works</h2><div class="how"><div><h3>Cheap checks first</h3><p>The game had to run in a mobile browser on school iPads, so guard vision does its cheapest tests first. It compares squared distances to skip the square root, then tests the view cone with a single dot product against a cosine worked out once at start-up. Only a target that passes both pays for a physics raycast to confirm line of sight. A small near circle means the player cannot stand right behind a guard unnoticed.</p></div><div><h3>An alert meter, not an instant fail</h3><p>Being seen does not start a chase straight away. An alert meter fills while the player is in view and drains when they break line of sight, and the chase begins only once it is full. That gives the player a moment to react and makes close calls feel fair. Thrown cheese takes priority over the player, so it works as a reliable distraction.</p></div><div><h3>A camera on a looping track</h3><p>The top-down camera rides a dolly track that loops around the level. The track is sampled once at start-up, and each update only considers the samples within a few metres of the camera&#x27;s last position, 20 times a second instead of every frame. Because the track loops, the cart always travels the short way round, and when the player respawns somewhere else the camera does one full search to snap to the right place.</p></div></div><figure class="flow"><figcaption>Guard behaviour</figcaption><ol><li>Walk the patrol route</li><li>Turn and inspect at waypoints</li><li>Player seen: alert meter fills</li><li>Chase</li><li>Lose the player: reset</li><li>Walk back to the route</li></ol></figure></section><section class="tight" id="code"><h2>Code</h2><p class="muted">Short excerpts from the project, written by me.</p><figure class="code"><figcaption><b>Can this guard see the target?</b><span>GuardVision.cs</span></figcaption><pre tabindex="0"><code>private bool DetectTarget(Transform target)
+{
+    Vector3 targetDirection = (target.position - transform.position).normalized;
+    float sqrDis = (transform.position - target.position).sqrMagnitude;
+
+    if (sqrDis &lt; viewRange)
+    {
+        //in view cone?
+        Vector3 dirNormalised = (target.position - transform.position).normalized;
+        float dot = Vector3.Dot(transform.forward, dirNormalised);//cos() between guard.fwd and target
+        bool withinAngle = dot &gt;= cosThreshold;
+
+        bool withinNearDistance = sqrDis &lt;= nearDis;//in near circle?
+
+        if (withinAngle || withinNearDistance)
+        {
+            float realDis = Mathf.Sqrt(sqrDis);
+            if (Physics.Raycast(transform.position, targetDirection, out RaycastHit hit, realDis))
+            {
+                if (hit.collider.CompareTag(target.tag))//checks if hit target contains player or cheese tag
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}</code></pre><p>Ordered from cheapest test to most expensive, so most guards on most frames never reach the raycast.</p></figure><figure class="code"><figcaption><b>Following the player around a looping track</b><span>DollyFollowPlayer.cs</span></figcaption><pre tabindex="0"><code>private void Update()
+{
+    if (path != null &amp;&amp; target != null &amp;&amp; Time.time - lastUpdateTime &gt; updateInterval)//checks position on a fixed time rather than every frame
+    {
+        lastUpdateTime = Time.time;
+        //get target
+        float target = UpdateDollyPosition();
+
+        float pathLength = path.PathLength; // Get the total track length
+        float currentPos = dollyCart.m_Position; // Current position of the dolly cart
+        float diff = target - currentPos; // Difference between target and current position
+
+        // Ensure shortest path around the loop
+        if (Mathf.Abs(diff) &gt; pathLength * 0.5f)
+        {
+            if (diff &gt; 0)
+                diff -= pathLength; // Adjust forward jump if it&#x27;s too large
+            else
+                diff += pathLength; // Adjust backward jump if it&#x27;s too large
+        }
+
+        //ensure position wraps within the valid range [0, pathLength]
+        float updatedPos = Mathf.Lerp(currentPos, WrapPosition(currentPos + diff), smoothSpeed * Time.deltaTime);
+        dollyCart.m_Position = updatedPos;
+    }
+}</code></pre><p>Without the wrap check, crossing the start of the loop would send the camera the long way round the whole level.</p></figure></section><section class="tight"><h2>Trailer</h2><div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/uGwDVG2_ZKo" title="The Ballad of Auld Dunrod gameplay video" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div></section><section class="tight"><h2>Screenshots</h2><div class="gallery"><a href="img/ballad-of-auld-dunrod-1.jpg"><img src="img/ballad-of-auld-dunrod-1.jpg" alt="The Ballad of Auld Dunrod screenshot 1" loading="lazy"></a><a href="img/ballad-of-auld-dunrod-2.jpg"><img src="img/ballad-of-auld-dunrod-2.jpg" alt="The Ballad of Auld Dunrod screenshot 2" loading="lazy"></a><a href="img/ballad-of-auld-dunrod-3.jpg"><img src="img/ballad-of-auld-dunrod-3.jpg" alt="The Ballad of Auld Dunrod screenshot 3" loading="lazy"></a><a href="img/ballad-of-auld-dunrod-4.jpg"><img src="img/ballad-of-auld-dunrod-4.jpg" alt="The Ballad of Auld Dunrod screenshot 4" loading="lazy"></a></div></section>
+<section class="tight" id="play"><h2>Play it</h2><div class="play" data-game="dunrod" data-title="The Ballad of Auld Dunrod"><img src="img/ballad-of-auld-dunrod-1.jpg" alt="" loading="lazy"><button class="btn main" type="button">&#9654; Play in browser</button></div>
 <p class="muted play-note">Runs in your browser, no download. Built for touch screens: drag the on-screen joystick with your finger or mouse. <button class="link" type="button" data-fs hidden>Fullscreen</button></p><iframe src="https://itch.io/embed/3041421?dark=true" width="552" height="167" title="The Ballad of Auld Dunrod on itch.io" loading="lazy"><a href="https://gcugames.itch.io/ballad-of-auld-dunrod">Ballad of Auld Dunrod by Glasgow Caledonian University, Patricija Gudynaite, Blitz_Maxis, SkrubJG, Allan, Bishop</a></iframe></section>
-<nav class="next" aria-label="Next project"><span class="muted">Next project</span><a href="tower-of-tales.html">Tower of Tales &rarr;</a></nav></div></main>
-<footer><div class="wrap">&copy; 2026 Allan Blyth. Gameplay programmer, Scotland.</div></footer><script src="script.js"></script></body></html>
+<nav class="next" aria-label="Next project"><span class="muted">Next project</span><a href="tower-of-tales.html">Tower of Tales &rarr;</a></nav></div>
+<section id="contact"><div class="wrap"><div class="cta"><div><h2>Like what you see?</h2><p>I'm looking for my first games industry role as a gameplay or AI programmer. Studios of any size welcome.</p></div>
+<div><a class="mail" href="mailto:allanjwb@gmail.com">allanjwb@gmail.com</a><p class="links"><a href="Allan_Blyth_CV.pdf">CV (PDF)</a><a href="https://www.linkedin.com/in/allan-blyth-32977b403/">LinkedIn</a><a href="https://github.com/allanOwO">GitHub</a><a href="https://allanowo.itch.io">itch.io</a></p></div></div></div></section></main>
+<footer><div class="wrap foot"><span>&copy; 2026 Allan Blyth. Gameplay programmer, Scotland.</span><span><a href="mailto:allanjwb@gmail.com">Email</a><a href="https://www.linkedin.com/in/allan-blyth-32977b403/">LinkedIn</a><a href="https://github.com/allanOwO">GitHub</a><a href="https://allanowo.itch.io">itch.io</a><a href="Allan_Blyth_CV.pdf">CV</a></span></div></footer>
+<dialog class="lightbox" aria-label="Screenshot"><img alt=""><button type="button" aria-label="Close">&times;</button></dialog>
+<script src="script.js"></script></body></html>
