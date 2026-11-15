@@ -29,7 +29,7 @@
         float dot = Vector3.Dot(transform.forward, dirNormalised);//cos() between guard.fwd and target
         bool withinAngle = dot &gt;= cosThreshold;
 
-        bool withinNearDistance = sqrDis &lt;= nearDis;//in near circle?
+        bool withinNearDistance = sqrDis &lt;= nearDis * nearDis;//in near circle?
 
         if (withinAngle || withinNearDistance)
         {

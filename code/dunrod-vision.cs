@@ -10,7 +10,7 @@ private bool DetectTarget(Transform target)
         float dot = Vector3.Dot(transform.forward, dirNormalised);//cos() between guard.fwd and target
         bool withinAngle = dot >= cosThreshold;
 
-        bool withinNearDistance = sqrDis <= nearDis;//in near circle?
+        bool withinNearDistance = sqrDis <= nearDis * nearDis;//in near circle?
 
         if (withinAngle || withinNearDistance)
         {
