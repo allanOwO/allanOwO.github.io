@@ -42,6 +42,13 @@ P("chill-fishing-game","Just a Chill Fishing Game","Relaxed fishing game","Gamep
  ["Built the hook and line: hook movement, the fishing line and catching fish, and shared the casting code with a teammate.","Implemented fish movement and the fish spawner, with rarity tiers from common to legendary.","Wrote the bubble spawner that adds movement and atmosphere underwater."],
  "Scoping features, iterating quickly, and delivering polished gameplay under a strict time limit.",
  "3271726","https://allanowo.itch.io/just-a-chill-fishing-game|Just a Chill Fishing Game by Allan, qlxiy, Ath3rox, Bishop, KyleMc04",play="fishing"),
+P("ai-recap","AI Recap System","Research prototype","Solo programmer | Research prototype | Unity and Gemini API",
+ "A Unity prototype that logs what the player does to the people in a small town, then turns that log into a written recap of the session, either with Google's Gemini API or from summaries I wrote by hand, so the two can be compared blind.",
+ "","unity",["Unity","C#","Gemini API","JSON"],
+ "I built the whole prototype: the town scene and characters you can talk to or kill, the event log, the Gemini integration and the hand-written alternative. The aim was a fair comparison, so the player cannot tell from how a recap appears which of the two wrote it.",
+ ["Logged every conversation and kill as a structured event with who, what and when, and serialised the session to JSON.","Sent that JSON to the Gemini API from Unity with UnityWebRequest and a prompt that asks for a short second-person recap.","Wrote around 80 recaps by hand, one for each possible order of events, and looked the right one up from a key built out of the same event log.","Made both versions look identical to the player: the hand-written recap waits a second before appearing and both use the same typewriter reveal."],
+ "Calling a web API from Unity, designing data so that code and a language model can both read it, and setting up a comparison so that the thing being tested is the only difference.",
+ "",""),
 P("voxel-world","Voxel World Prototype","OpenGL voxel engine","Solo programmer | C++ | OpenGL",
  "A voxel world built from the ground up to explore procedural generation, real-time lighting, world interaction and collision. My first OpenGL project. I've since gone back and optimised it, and it now runs a 1,000 chunk render distance at around 970 FPS.",
  "https://img.itch.zone/aW1nLzI1MDE3MTYxLnBuZw==/original/%2BL%2BNqm.png","gl",["C++","OpenGL","Procedural generation","Optimisation"],
@@ -91,6 +98,27 @@ DEEP={
  flow=["Walk the patrol route","Turn and inspect at waypoints","Player seen: alert meter fills","Chase","Lose the player: reset","Walk back to the route"],
  code=[("Can this guard see the target?","dunrod-vision.cs","GuardVision.cs","Ordered from cheapest test to most expensive, so most guards on most frames never reach the raycast."),
   ("Following the player around a looping track","dunrod-dolly.cs","DollyFollowPlayer.cs","Without the wrap check, crossing the start of the loop would send the camera the long way round the whole level.")]),
+"tower-of-tales":dict(
+ how=[("Scores instead of a dice roll","Each of the boss's seven attacks has a score that climbs every frame at its own rate, with some randomness in how fast. When the boss is ready to attack it uses whichever score is highest, then resets that score to zero. An attack that has just been used has to climb all the way back up, so the boss rarely repeats itself, and an attack with a higher weight comes round more often without ever becoming predictable."),
+  ("A second stage that changes the odds","When the boss drops to its second stage, everything on screen is cleared and the eye attack's score is set far above the rest so it always opens the stage. Its weight is then raised so it stays common for the rest of the fight. The second stage also adds a tentacle that strikes at the player's position whenever they stand too close, so hugging the boss stops being safe."),
+  ("Patterns built from one Shoot function","The spiral, spurt and wave patterns all go through the same Shoot call, which takes the bullet force, the delay between shots, the angle and whether to fire in two directions at once. A new pattern is mostly a new loop over angles and timings.")],
+ flowtitle="Choosing the next attack",
+ flow=["Every score climbs each frame","Boss finishes an attack","Short random pause","Highest score attacks","That score resets to zero"],
+ code=[("Weighted attack selection","tower-scores.cs","BossAttack.cs, four short excerpts","Resetting only the winner's score gives a cooldown for free. No attack needs its own timer, and tuning the fight is a matter of changing two numbers per attack.")]),
+"bob-steve":dict(
+ how=[("A rope that is simulated, not worked out","The string between players is simulated as an actual rope. It pays off a spool as you walk, falls under its own weight, catches on what it touches and stays where it lands. My first version stored the shortest path from the anchor to the player and recalculated it every frame. That was right about where a tight rope goes, but a shortest path has no slack, so it could never sag between two crates or lie in a loop behind you."),
+  ("Two numbers to tune it","Tautness is how hard the rope pulls itself straight, from dead weight hanging in a deep curve to pulled tight against every corner. Elasticity is how quickly the spool takes slack back in when you walk back along the rope. Keeping them separate means the look of the rope and how forgiving it is to play with can be tuned independently. An optional tension mode makes the spool finite, so the last stretch drags and the end of it stops you."),
+  ("Voice that travels down the string","Each player wears a colour, and the tin can dials one teammate's colour to talk to them. Audio is sent in 40 ms packets at telephone quality to the host, which forwards it only to the player being called, so a call is private rather than muted for everyone else. Both ends have to be tied on to an anchor first, which is what makes losing your line cost you something."),
+  ("Mortars that ask a question","A mortar round is a whistle and a mark on the ground, a fuse long enough to react to, and then the burst. The server owns the timing and the damage. Every client is told once, up front, and plays the whistle and flash off its own clock, so a strike costs one network message instead of a stream of them.")],
+ flowtitle="One mortar round",
+ flow=["Server picks a target","One message to every client","Whistle and ground mark","Fuse: time to move","Burst, damage on the server"]),
+"ai-recap":dict(
+ how=[("An event log both sides can read","Every character has a name and a role. Talking to one or killing one adds an event with the name, role, action, line of dialogue and timestamp. The same list feeds both versions: it is serialised to JSON for Gemini, and reduced to a key such as Guard_Talk-Merchant_Kill to look up the hand-written recap."),
+  ("Keeping the comparison fair","Gemini takes a moment to answer and a lookup is instant, which would give the game away. The hand-written recap therefore waits a second before it appears, and both are revealed one character at a time by the same routine. A single toggle switches between the two, so the builds given to testers are otherwise identical."),
+  ("Limiting the possibilities","A character you have spoken to can no longer be killed, and a dead one cannot speak. That keeps the number of possible sessions small enough to write a recap for every one of them by hand, which is what makes a like-for-like comparison possible at all.")],
+ flowtitle="From play to recap",
+ flow=["Talk to or kill a character","Event added to the log","Recap requested","Gemini writes it, or the key finds a hand-written one","Same typewriter reveal"],
+ code=[("The hand-written path, made to look the same","recap-blind.cs","NpcSessionLogger.cs","The one-second wait exists only so testers cannot tell the two versions apart by speed.")]),
 "voxel-world":dict(
  how=[("Measure first","Before optimising anything I wrote a benchmark that loads the world, flies a fixed route, spins on the spot and edits blocks, then appends load time, average FPS, 1% lows, draw calls and memory to a CSV. Every change below was kept or thrown away based on that log, which now holds 74 runs."),
   ("One draw instead of thousands","The first benchmark showed 5,839 draw calls a frame at a 64 chunk distance. Chunk meshes now live in a shared pool and the whole world is submitted as a list of indirect draw commands, so the GPU walks the list instead of the CPU issuing a draw per chunk. That one change took the benchmark from 108 to 988 FPS."),
@@ -113,7 +141,7 @@ def deep(p):
         h+=f'<figure class="bars"><figcaption>{E(t)}</figcaption>'+"".join(f'<div class="bar"><span>{E(l)}</span><div><i style="width:{v/top*100:.1f}%"></i><b>{v:,} FPS</b></div><small>{E(x)}</small></div>' for l,v,x in rows)+f'<p class="muted">{E(note)}</p></figure>'
     h+="</section>"
     if d.get("code"):
-        h+='<section class="tight" id="code"><h2>Code</h2><p class="muted">Short excerpts from the project, written by me.</p>'+"".join(f'<figure class="code"><figcaption><b>{E(t)}</b><span>{E(src)}</span></figcaption><pre tabindex="0"><code>{E(open("code/"+f,encoding="utf-8").read().rstrip())}</code></pre><p>{E(why)}</p></figure>' for t,f,src,why in d["code"])+"</section>"
+        h+='<section class="tight" id="code"><h2>Code</h2><p class="muted">Short excerpts from the project. Every line shown is mine.</p>'+"".join(f'<figure class="code"><figcaption><b>{E(t)}</b><span>{E(src)}</span></figcaption><pre tabindex="0"><code>{E(open("code/"+f,encoding="utf-8").read().rstrip())}</code></pre><p>{E(why)}</p></figure>' for t,f,src,why in d["code"])+"</section>"
     return h
 # Headline numbers shown as a strip at the top of a project page: (number, label)
 STATS={
@@ -122,7 +150,7 @@ STATS={
 "voxel-world":[("108 &rarr; 836","average FPS, same 64 chunk distance"),("48 s &rarr; 1.5 s","world load time"),("1,000","chunk render distance, up from 64"),("~970","FPS at 1,000 chunks, 1080p")],
 "chill-fishing-game":[("48","hours, concept to release"),("5","person team"),("GGJ","Global Game Jam 2025")],
 }
-TEAM={"kyomen":"5 people","ballad-of-auld-dunrod":"8 people","tower-of-tales":"6 people","bob-steve":"5 people","chill-fishing-game":"5 people","voxel-world":"Solo","asteroids":"Solo"}
+TEAM={"kyomen":"5 people","ballad-of-auld-dunrod":"8 people","tower-of-tales":"6 people","bob-steve":"5 people","chill-fishing-game":"5 people","voxel-world":"Solo","asteroids":"Solo","ai-recap":"Solo"}
 SKILLS=[("Languages","C#, C++"),("Engines and graphics","Unity, OpenGL, WebGL builds"),("Gameplay and AI","State machines, boss and enemy behaviour, attack systems, weighted randomness, coroutine-based timing"),("Also","Git, controller input, JSON, Gemini API integration")]
 PLAYNOTE={"dunrod":"Built for touch screens: drag the on-screen joystick with your finger or mouse."}
 ICON="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23ff4d5e'/%3E%3Cpath d='M8 24 16 8l8 16' fill='none' stroke='%2315111f' stroke-width='4'/%3E%3C/svg%3E"
@@ -157,9 +185,10 @@ def card(p):
 def stats(p):
     s=STATS.get(p["slug"])
     return '<dl class="stats">'+"".join(f"<div><dt>{n}</dt><dd>{E(l)}</dd></div>" for n,l in s)+"</dl>" if s else ""
-def feat(p,img,flip=False):
+def feat(p,img,flip=False,loop=""):
+    media=f'<video autoplay muted loop playsinline preload="metadata" poster="{img}" src="{loop}" aria-label="{E(p["title"])} fly-through"></video>' if loop else f'<img src="{img}" alt="{E(p["title"])} screenshot" loading="lazy">'
     pts=[f"{n} {l}" for n,l in STATS[p["slug"]][:3]] if flip else [E(x) for x in p["bullets"][:3]]
-    return f'''<div class="feat{" flip" if flip else ""}"><a class="feat-img" href="{p["slug"]}.html"><img src="{img}" alt="{E(p["title"])} screenshot" loading="lazy"></a><div><p class="card-role">{E(role(p))} &middot; {E(context(p))}</p><p>{E(p["summary"])}</p>
+    return f'''<div class="feat{" flip" if flip else ""}"><a class="feat-img" href="{p["slug"]}.html">{media}</a><div><p class="card-role">{E(role(p))} &middot; {E(context(p))}</p><p>{E(p["summary"])}</p>
 <ul class="ticks">{"".join(f"<li>{x}</li>" for x in pts)}</ul>{tags(p)}<a class="btn main" href="{p["slug"]}.html">Read the case study</a></div></div>'''
 def index():
     k=PROJECTS[0]; ks=shots(k); v=next(p for p in PROJECTS if p["slug"]=="voxel-world")
@@ -168,9 +197,9 @@ def index():
 <p class="lede">I'm Allan, a gameplay programmer specialising in enemy AI and multi-phase boss systems in Unity and C#. I also build engine tech in C++ and OpenGL.</p>
 <div class="btns"><a class="btn main" href="#work">See my work</a><a class="btn" href="{CV}">Download CV</a><a class="btn" href="mailto:{EMAIL}">Email me</a></div></div>
 <a class="hero-shot" href="{k["slug"]}.html"><img src="{ks[0]}" alt="Kyomen gameplay screenshot" fetchpriority="high"><span><b>Kyomen</b> Four-phase boss fight, heading to Steam &rarr;</span></a></div>
-<div class="wrap"><ul class="facts"><li><b>BSc (Hons) 2:1</b>Games Development, Glasgow Caledonian University, 2026</li><li><b>Co-founder</b>Marmot Studios Ltd, taking Kyomen to Steam</li><li><b>{len(PROJECTS)} shipped projects</b>{nplay} playable right here in your browser</li><li><b>C# and C++</b>Unity gameplay and OpenGL engine work</li></ul></div>
+<div class="wrap"><ul class="facts"><li><b>BSc (Hons) 2:1</b>Games Development, Glasgow Caledonian University, 2026</li><li><b>Co-founder</b>Marmot Studios Ltd, taking Kyomen to Steam</li><li><b>{sum(1 for p in PROJECTS if p["itch"])} shipped projects</b>{nplay} playable right here in your browser</li><li><b>C# and C++</b>Unity gameplay and OpenGL engine work</li></ul></div>
 <section id="work"><div class="wrap"><p class="kicker">Selected work</p><h2>Featured: {k["title"]}</h2>{feat(k,ks[1])}</div></section>
-<section class="tight"><div class="wrap"><h2>Engine work: {v["title"]}</h2>{feat(v,shots(v)[0],True)}</div></section>
+<section class="tight"><div class="wrap"><h2>Engine work: {v["title"]}</h2>{feat(v,"clips/voxel-world.jpg",True,"clips/voxel-world-loop.mp4")}</div></section>
 <section><div class="wrap"><h2>More projects</h2><div class="grid">{"".join(card(p) for p in PROJECTS if p not in (k,v))}</div></div></section>
 <section id="about"><div class="wrap about"><div><p class="kicker">About</p><h2>I make enemies worth fighting.</h2>
 <p>I graduated in 2026 with a 2:1 in Games Development from Glasgow Caledonian University. Most of my work is combat: enemy behaviour, encounter pacing, and boss fights that react to the player while staying readable enough to feel fair.</p>
@@ -180,12 +209,12 @@ def index():
 <dl class="skills">{"".join(f"<div><dt>{E(a)}</dt><dd>{E(b)}</dd></div>" for a,b in SKILLS)}<div><dt>Experience</dt><dd>Co-founder and Programmer, Marmot Studios Ltd, 2026 to present</dd></div><div><dt>Education</dt><dd>BSc (Hons) Games Development, 2:1, Glasgow Caledonian University, 2022 to 2026</dd></div></dl></div></section>
 {contact("Get in touch")}'''
     ld='<script type="application/ld+json">'+json.dumps({"@context":"https://schema.org","@type":"Person","name":NAME,"jobTitle":"Gameplay Programmer","url":BASE,"email":"mailto:"+EMAIL,"sameAs":[LI,GH,ITCH],"alumniOf":"Glasgow Caledonian University"})+"</script>"
-    return page(f"{NAME} | Gameplay Programmer","Gameplay programmer specialising in enemy AI and multi-phase boss systems in Unity/C#, with C++/OpenGL engine experience. Open to work.",ks[0],b,"",ld)
+    return page(f"{NAME} | Gameplay Programmer","Gameplay programmer specialising in enemy AI and multi-phase boss systems in Unity/C#, with C++/OpenGL engine experience. Open to work.","img/social-card.jpg",b,"",ld)
 def contact(h):
     return f'''<section id="contact"><div class="wrap"><div class="cta"><div><h2>{h}</h2><p>I'm looking for my first games industry role as a gameplay or AI programmer. Studios of any size welcome.</p></div>
 <div><a class="mail" href="mailto:{EMAIL}">{EMAIL}</a><p class="links"><a href="{CV}">CV (PDF)</a><a href="{LI}">LinkedIn</a><a href="{GH}">GitHub</a><a href="{ITCH}">itch.io</a></p></div></div></div></section>'''
 def case(p):
-    url,lab=p["label"].split("|"); ss=shots(p)
+    url,lab=p["label"].split("|") if p["label"] else ("",""); ss=shots(p)
     poster=p["video"][:-4]+".jpg"
     vid=f'<video controls muted loop playsinline preload="none" src="{p["video"]}"{f' poster="{poster}"' if os.path.exists(poster) else ""}></video>' if p["video"] else ""
     if p["yt"]: vid+=f'<div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/{p["yt"]}" title="{E(p["title"])} gameplay video" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>'
@@ -194,7 +223,8 @@ def case(p):
     web=f'''<div class="play" data-game="{p["play"]}" data-title="{E(p["title"])}"><img src="{ss[0] if ss else p["cover"]}" alt="" loading="lazy"><button class="btn main" type="button">&#9654; Play in browser</button></div>
 <p class="muted play-note">Runs in your browser, no download. {PLAYNOTE.get(p["play"],"Best on desktop with a keyboard and mouse.")} <button class="link" type="button" data-fs hidden>Fullscreen</button></p>''' if p["play"] else ""
     gal=f'<section class="tight"><h2>Screenshots</h2><div class="gallery">{"".join(f"""<a href="{s}"><img src="{s}" alt="{E(p["title"])} screenshot {i+1}" loading="lazy"></a>""" for i,s in enumerate(ss))}</div></section>' if len(ss)>1 else ""
-    jump='<a class="btn main" href="#play">&#9654; Play in browser</a>' if p["play"] else f'<a class="btn main" href="{url}">View on itch.io</a>'
+    jump='<a class="btn main" href="#play">&#9654; Play in browser</a>' if p["play"] else f'<a class="btn main" href="{url}">View on itch.io</a>' if url else '<a class="btn main" href="#how">How it works</a>'
+    itch=f'''<section class="tight" id="play"><h2>Play it</h2>{web}<iframe src="https://itch.io/embed/{p["itch"]}?dark=true" width="552" height="167" title="{E(p["title"])} on itch.io" loading="lazy"><a href="{url}">{E(lab)}</a></iframe></section>''' if p["itch"] else ""
     b=f'''<div class="wrap"><div class="cs-head"><div><a class="back" href="index.html#work">&larr; All projects</a><p class="kicker">{E(p["kind"])}</p><h1>{E(p["title"])}</h1><p class="lede">{E(p["summary"])}</p>
 <div class="btns">{jump}<a class="btn" href="#built">What I built</a>{"<a class=btn href=#code>See the code</a>" if DEEP.get(p["slug"],{}).get("code") else ""}</div></div><img class="cover" src="{ss[0] if ss else p["cover"]}" alt="{E(p["title"])} screenshot" fetchpriority="high"></div>
 <dl class="meta"><div><dt>Role</dt><dd>{E(role(p))}</dd></div><div><dt>Team</dt><dd>{E(TEAM[p["slug"]])}</dd></div><div><dt>Context</dt><dd>{E(context(p))}</dd></div><div><dt>Tech</dt><dd>{E(", ".join(p["tags"]))}</dd></div></dl>
@@ -202,10 +232,16 @@ def case(p):
 <div class="cs-body" id="built"><div><h2>What I built</h2><ul class="ticks">{"".join(f"<li>{E(x)}</li>" for x in p["bullets"])}</ul></div>
 <div><h2>My role</h2><p>{E(p["role"])}</p><h2 class="gap">What I learned</h2><p>{E(p["learned"])}</p></div></div>
 {deep(p)}{vid}{gal}
-<section class="tight" id="play"><h2>Play it</h2>{web}<iframe src="https://itch.io/embed/{p["itch"]}?dark=true" width="552" height="167" title="{E(p["title"])} on itch.io" loading="lazy"><a href="{url}">{E(lab)}</a></iframe></section>
+{itch}
 <nav class="next" aria-label="Next project"><span class="muted">Next project</span><a href="{n["slug"]}.html">{E(n["title"])} &rarr;</a></nav></div>
 {contact("Like what you see?")}'''
     return page(f'{p["title"]} | {NAME}',p["summary"],ss[0] if ss else p["cover"],b,p["slug"]+".html")
 open("index.html","w",encoding="utf-8").write(index())
 for p in PROJECTS: open(p["slug"]+".html","w",encoding="utf-8").write(case(p))
+def lost():
+    b=f'<div class="wrap lost"><p class="kicker">404</p><h1>You died.</h1><p class="lede">That page does not exist, or it moved when I rebuilt the site.</p><div class="btns"><a class="btn main" href="{BASE}">Respawn at the home page</a><a class="btn" href="{BASE}#work">See my work</a></div></div>'
+    h=page(f"Page not found | {NAME}","That page does not exist.","img/social-card.jpg",b,"404.html")
+    for a in ('href="style.css"','src="script.js"','href="index.html',f'href="{CV}"'): h=h.replace(a,a.replace('="','="'+BASE,1))
+    return h.replace("<title>",'<meta name="robots" content="noindex"><title>')
+open("404.html","w",encoding="utf-8").write(lost())
 open("sitemap.xml","w",encoding="utf-8").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+"".join(f"<url><loc>{BASE}{u}</loc></url>\n" for u in [""]+[p["slug"]+".html" for p in PROJECTS])+"</urlset>\n")

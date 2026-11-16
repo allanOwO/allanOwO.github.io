@@ -161,3 +161,7 @@ figure{margin:24px 0 0}figcaption{font:700 .75rem var(--body);letter-spacing:.12
 .grid{grid-template-columns:1fr}.btn{padding:11px 18px}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* looping clip in a featured block, 404 page */
+.feat video{aspect-ratio:16/10;object-fit:cover;width:100%;display:block;margin:0;border-radius:0}
+.lost{padding:clamp(64px,14vh,160px) 0;min-height:60vh}

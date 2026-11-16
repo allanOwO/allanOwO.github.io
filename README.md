@@ -10,3 +10,6 @@ Static site, no dependencies. Open `index.html` or host on GitHub Pages / Netlif
 - Headline stats and team sizes live in the `STATS` and `TEAM` tables in `build.py`, keyed by project slug.
 - The "How it works" and "Code" sections come from the `DEEP` table in `build.py`. Code excerpts are plain files in `code/`. The Kyomen excerpts are parked in `stash/` (git-ignored, so not published); to bring them back, move them into `code/` and rename `code_stashed` to `code` in Kyomen's `DEEP` entry.
 - `build.py` also writes `sitemap.xml`. Change `BASE` if the site moves to another domain.
+- A project with no itch.io page leaves its itch id and label empty; the "Play it" section is then left out.
+- `build.py` also writes `404.html`. The home page preview image for links is `img/social-card.jpg`.
+- The home page "Engine work" block loops `clips/voxel-world-loop.mp4`, a small cut of the full clip.
