@@ -25,21 +25,21 @@ P("tower-of-tales","Tower of Tales","Arena shooter","Gameplay Programmer | Team 
  "A short arena shooter inspired by Arena of the Mad King, The Binding of Isaac and Realm of the Mad God. A cultist enters the arena to defeat the boss and bring back their family.",
  "https://img.itch.zone/aW1nLzI2OTAwMDEyLmpwZw==/original/omEVot.jpg","unity",["Unity","C#","Boss AI","Controller input"],
  "I worked on the player and boss gameplay loop, focusing on responsive movement and an encounter that reacts to the player's position and actions.",
- ["Created boss attack patterns and reactive decision-making to structure the main encounter.","Implemented player movement and tuned its feel for arena combat.","Added controller support so the game plays well across input devices."],
+ ["Created the boss's attack patterns, chosen by weighted scores that build up over time, with a second stage and a close-range attack that triggers when the player gets near.","Implemented player movement and tuned its feel for arena combat.","Added controller support for movement, dodging and the menus, so the game plays well across input devices."],
  "Encounter design, input abstraction, and how boss behaviour can communicate patterns while still demanding player adaptation.",
  "2672862","https://qlxiy.itch.io/tower-of-tales|Tower of Tales by qlxiy, Allan, PastorYoda216, Patricija Gudynaite, ashxy, beansTM",yt="i9INBV4BUcI",play="tower"),
 P("bob-steve","Bob n' Steve","Cooperative action","Programmer | Team project",
  "Four soldiers, one string, a field that wants you dead. A cooperative action game with a shared string as its central teamwork mechanic.",
  "https://img.itch.zone/aW1nLzI5OTIwNDEzLnBuZw==/original/qetc6E.png","unity",["Unity","C#","Multiplayer","Voice chat"],
  "I focused on the systems that connect the players and make cooperation meaningful. The string needed gameplay logic that supported a group while staying readable and responsive in combat.",
- ["Designed and implemented the shared-string mechanic linking the soldiers.","Contributed to the in-game voice communication system.","Implemented and integrated multiple weapon systems."],
+ ["Designed and implemented the shared-string mechanic linking the soldiers.","Built the tin-can voice chat: private calls down the string to one teammate, sent as telephone-quality audio over Netcode.","Built the mortar strikes and landmines, plus the injury effects, ragdoll and dragging of downed teammates."],
  "Multiplayer-focused gameplay, explaining technical ideas within a team, and building mechanics that reinforce a game's core identity.",
  "4997416","https://ath3rox.itch.io/bob-steve|Bob n' Steve by Ath3rox, Bishop, KyleMc04, Charlie Turnbull - qlxiy, Allan"),
 P("chill-fishing-game","Just a Chill Fishing Game","Relaxed fishing game","Gameplay Programmer | 48-hour jam | Global Game Jam 2025",
  "Explore the deepest depths, discover fish and make Marty proud in this relaxed fishing game.",
  "https://img.itch.zone/aW1nLzE5NTQ2NzQwLmpwZw==/original/ML78Ot.jpg","unity",["Unity","C#","Game jam"],
  "I helped take the game from concept to a complete playable release within 48 hours, focusing on fishing, discovering life underwater and making the environment feel active.",
- ["Designed and implemented the core fishing mechanic, from player interaction to catch feedback.","Implemented fish behaviours that make exploration rewarding.","Created bubble behaviours and environmental feedback for movement and atmosphere."],
+ ["Built the hook and line: hook movement, the fishing line and catching fish, and shared the casting code with a teammate.","Implemented fish movement and the fish spawner, with rarity tiers from common to legendary.","Wrote the bubble spawner that adds movement and atmosphere underwater."],
  "Scoping features, iterating quickly, and delivering polished gameplay under a strict time limit.",
  "3271726","https://allanowo.itch.io/just-a-chill-fishing-game|Just a Chill Fishing Game by Allan, qlxiy, Ath3rox, Bishop, KyleMc04",play="fishing"),
 P("voxel-world","Voxel World Prototype","OpenGL voxel engine","Solo programmer | C++ | OpenGL",
@@ -56,7 +56,7 @@ P("voxel-world","Voxel World Prototype","OpenGL voxel engine","Solo programmer |
   "Wrote a benchmark that flies, spins and edits the world, then logs FPS, frame times and memory to a CSV.",
   "Same 64 chunk distance, before and after: loading went from 48 s to 1.5 s and average FPS from 108 to 836. At 1,000 chunks it averages around 970 FPS at 1080p on an RX 9060 XT."],
  "C++, OpenGL rendering, procedural systems, spatial organisation and lighting, and the challenges of building engine functionality from scratch. Going back to optimise it taught me to measure first and only keep the changes that make a real difference.",
- "4197600","https://allanowo.itch.io/voxel-world-prototype|Voxel World Prototype by Allan"),
+ "4197600","https://allanowo.itch.io/voxel-world-prototype|Voxel World Prototype by Allan",video="clips/voxel-world.mp4"),
 P("asteroids","Asteroids","Space shooter prototype","Solo programmer | C++ | OpenGL",
  "An arcade-inspired space shooter with procedural asteroid fields and a PS2-inspired low-poly look, built to develop my C++ and OpenGL experience.",
  "https://img.itch.zone/aW1nLzI5OTQ3MTI2LnBuZw==/original/jQ8lWB.png","gl",["C++","OpenGL","Low-poly"],
@@ -123,7 +123,7 @@ STATS={
 "chill-fishing-game":[("48","hours, concept to release"),("5","person team"),("GGJ","Global Game Jam 2025")],
 }
 TEAM={"kyomen":"5 people","ballad-of-auld-dunrod":"8 people","tower-of-tales":"6 people","bob-steve":"5 people","chill-fishing-game":"5 people","voxel-world":"Solo","asteroids":"Solo"}
-SKILLS=[("Languages","C#, C++"),("Engines and graphics","Unity, OpenGL, WebGL builds"),("Gameplay and AI","State machines, boss and enemy behaviour, attack systems, randomised attack selection, coroutine-based timing"),("Also","Git, controller input, JSON, Gemini API integration")]
+SKILLS=[("Languages","C#, C++"),("Engines and graphics","Unity, OpenGL, WebGL builds"),("Gameplay and AI","State machines, boss and enemy behaviour, attack systems, weighted randomness, coroutine-based timing"),("Also","Git, controller input, JSON, Gemini API integration")]
 PLAYNOTE={"dunrod":"Built for touch screens: drag the on-screen joystick with your finger or mouse."}
 ICON="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23ff4d5e'/%3E%3Cpath d='M8 24 16 8l8 16' fill='none' stroke='%2315111f' stroke-width='4'/%3E%3C/svg%3E"
 def role(p): return p["meta"].split(" | ")[0]
@@ -149,7 +149,7 @@ def page(title,desc,img,body,path="",ld=""):
 <script src="script.js"></script></body></html>'''
 def tags(p): return '<ul class="tags">'+"".join(f"<li>{E(t)}</li>" for t in p["tags"])+"</ul>"
 def badges(p):
-    b=('<li class="b-play">Play in browser</li>' if p["play"] else "")+('<li>Trailer</li>' if p["yt"] or p["video"] else "")
+    b=('<li class="b-play">Play in browser</li>' if p["play"] else "")+('<li>Trailer</li>' if p["yt"] else '<li>Video</li>' if p["video"] else "")
     return f'<ul class="badges">{b}</ul>' if b else ""
 def card(p):
     return f'''<a class="card" href="{p["slug"]}.html"><div class="thumb"><img src="{p["cover"]}" alt="" loading="lazy">{badges(p)}</div>
@@ -186,9 +186,10 @@ def contact(h):
 <div><a class="mail" href="mailto:{EMAIL}">{EMAIL}</a><p class="links"><a href="{CV}">CV (PDF)</a><a href="{LI}">LinkedIn</a><a href="{GH}">GitHub</a><a href="{ITCH}">itch.io</a></p></div></div></div></section>'''
 def case(p):
     url,lab=p["label"].split("|"); ss=shots(p)
-    vid=f'<video controls muted loop playsinline src="{p["video"]}"></video>' if p["video"] else ""
+    poster=p["video"][:-4]+".jpg"
+    vid=f'<video controls muted loop playsinline preload="none" src="{p["video"]}"{f' poster="{poster}"' if os.path.exists(poster) else ""}></video>' if p["video"] else ""
     if p["yt"]: vid+=f'<div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/{p["yt"]}" title="{E(p["title"])} gameplay video" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>'
-    if vid: vid=f'<section class="tight"><h2>Trailer</h2>{vid}</section>'
+    if vid: vid=f'<section class="tight"><h2>{"Trailer" if p["yt"] else "In motion"}</h2>{vid}</section>'
     n=PROJECTS[(PROJECTS.index(p)+1)%len(PROJECTS)]
     web=f'''<div class="play" data-game="{p["play"]}" data-title="{E(p["title"])}"><img src="{ss[0] if ss else p["cover"]}" alt="" loading="lazy"><button class="btn main" type="button">&#9654; Play in browser</button></div>
 <p class="muted play-note">Runs in your browser, no download. {PLAYNOTE.get(p["play"],"Best on desktop with a keyboard and mouse.")} <button class="link" type="button" data-fs hidden>Fullscreen</button></p>''' if p["play"] else ""
